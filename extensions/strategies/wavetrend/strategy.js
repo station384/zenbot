@@ -175,13 +175,13 @@ module.exports = {
     // -- common
     period_length: Phenotypes.RangePeriod(1, 120, 'm'),
     min_periods: Phenotypes.Range(1, 200),
-    markdown_buy_pct: Phenotypes.RangeFloat(-1, 5),
-    markup_sell_pct: Phenotypes.RangeFloat(-1, 5),
+    markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
+    markup_sell_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
     order_type: Phenotypes.ListOption(['maker', 'taker']),
-    sell_stop_pct: Phenotypes.Range0(1, 50),
-    buy_stop_pct: Phenotypes.Range0(1, 50),
-    profit_stop_enable_pct: Phenotypes.Range0(1, 20),
-    profit_stop_pct: Phenotypes.Range(1,20),
+    sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
+    buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
+    profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0,0.1),
+    profit_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
 
     // -- strategy
     wavetrend_channel_length: Phenotypes.Range(1,20),

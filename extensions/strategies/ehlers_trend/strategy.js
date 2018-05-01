@@ -71,15 +71,17 @@ module.exports = {
 
     // -- common
     period_length: Phenotypes.RangePeriod(15, 120, 'm'),
-    markdown_buy_pct: Phenotypes.RangeFloat(-1, 3),
-    markup_sell_pct: Phenotypes.RangeFloat(-1, 3),
+    markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
+    markup_sell_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
     order_type: Phenotypes.ListOption(['maker', 'taker']),
-    profit_stop_enable_pct: Phenotypes.Range0(1, 20),
-    profit_stop_pct: Phenotypes.Range(1,20),
+    sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
+    buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
+    profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0,0.1),
+    profit_stop_pct: Phenotypes.RangeFactor(0.0, 20.0,0.1),
     
     //Strategy Specific
-    alpha: Phenotypes.RangeFactor(0.01, 0.2, 0.01)
-
+    alpha: Phenotypes.RangeFactor(0.01, 5.0, 0.01),
+    price_source: Phenotypes.ListOption(['hl2', 'hlc3', 'ohlc4', 'HAohlc4'])
 
   }
 }

@@ -160,13 +160,13 @@ module.exports = {
     //General Options
     period_length: Phenotypes.RangePeriod(5, 240, 'm'),
     min_periods: Phenotypes.Range(10, 10),
-    markdown_buy_pct: Phenotypes.RangeFloat(0, 0),
-    markup_sell_pct: Phenotypes.RangeFloat(0, 0),
+    markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
+    markup_sell_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
     order_type: Phenotypes.ListOption(['maker', 'taker']),
-    sell_stop_pct: Phenotypes.Range0(1, 50),
-    buy_stop_pct: Phenotypes.Range0(1, 50),
-    profit_stop_enable_pct: Phenotypes.Range(1, 20),
-    profit_stop_pct: Phenotypes.Range(1, 10),
+    sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
+    buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
+    profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0,0.1),
+    profit_stop_pct: Phenotypes.RangeFactor(0.0, 20.0,0.1),
 
     //Strategy Specific
     mama_fastlimit: Phenotypes.RangeFactor(0.1, 0.9, 0.1),

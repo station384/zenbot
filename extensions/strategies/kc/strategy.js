@@ -64,18 +64,18 @@ module.exports = {
   phenotypes: {
     // -- common
     period_length: Phenotypes.RangePeriod(1, 120, 'm'),
-    markdown_buy_pct: Phenotypes.RangeFloat(-1, 5),
-    markup_sell_pct: Phenotypes.RangeFloat(-1, 5),
+    markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
+    markup_sell_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
     order_type: Phenotypes.ListOption(['maker', 'taker']),
-    sell_stop_pct: Phenotypes.Range0(1, 50),
-    buy_stop_pct: Phenotypes.Range0(1, 50),
-    profit_stop_enable_pct: Phenotypes.Range0(1, 20),
-    profit_stop_pct: Phenotypes.Range(1,20),
+    sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
+    buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
+    profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0,0.1),
+    profit_stop_pct: Phenotypes.RangeFactor(0.0, 20.0,0.1),
 
     // -- strategy
     kc_size: Phenotypes.Range(1, 40),
-    kc_upper_channel_pct: Phenotypes.RangeFloat(-1, 30),
-    kc_lower_channel_pct: Phenotypes.RangeFloat(-1, 30)
+    kc_upper_channel_pct: Phenotypes.RangeFactor(-1.0, 30.0, 0.1),
+    kc_lower_channel_pct: Phenotypes.RangeFactor(-1.0, 30.0, 0.1)
   }
 }
 
