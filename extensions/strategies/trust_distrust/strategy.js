@@ -145,6 +145,7 @@ module.exports = {
     buy_stop_pct: Phenotypes.Range0(1, 50),
     profit_stop_enable_pct: Phenotypes.Range0(1, 20),
     profit_stop_pct: Phenotypes.Range(1,20),
+    rsi_periods: Phenotypes.Range(6, 16),
 
     // -- strategy
     sell_threshold: Phenotypes.Range(1, 100),
