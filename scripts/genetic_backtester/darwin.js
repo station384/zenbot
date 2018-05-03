@@ -20,6 +20,7 @@
  * --noStatSave=<true>|<false>            true:no statistics are saved to the simulation folder
  * --silent=<true>|<false>                true:can improve performance
  * --runGenerations=<int>                 if used run this number of generations, will be shown 1 less due to generations starts at 0
+ * --minTrades=<int>                      Minimum wins before generation is considured fit to evolve
  *
  *
  * any parameters for sim and or strategy can be passed in and will override the genetic test generated parameter
@@ -40,7 +41,7 @@ let Backtester = require('../../lib/backtester')
 let argv = require('yargs').argv
 let z = require('zero-fill')
 let n = require('numbro')
-let _ = require('lodash')
+//let _ = require('lodash')
 
 let VERSION = 'Zenbot 4 Genetic Backtester v0.2.3'
 
@@ -57,8 +58,9 @@ let runGenerations = undefined
 let generationProcessing = false
 let population_data = ''
 let noStatSave = false
-let floatScanWindow = false
+//let floatScanWindow = false
 let ignoreLaunchFitness = false
+let minimumTrades = 0
 
 let readSimDataFile = (iteration) => {
   let jsonFileName = `simulations/${population_data}/gen_${generationCount}/sim_${iteration}.json`
@@ -258,6 +260,7 @@ function simulateGeneration(generateLaunchFile) {
       }
 
       iterationCount++
+      phenotype.minTrades = minimumTrades
       Backtester.runCommand(v, phenotype, command, cb)
     }
   })).reduce((a, b) => a.concat(b))
@@ -325,9 +328,9 @@ function simulateGeneration(generateLaunchFile) {
           (a.fitness < b.fitness) ? 1 :
             (b.fitness < a.fitness) ? -1 : 0)
 
-    let bestOverallCommand = generateCommandParams(bestOverallResult[0])
-    bestOverallCommand = prefix + bestOverallCommand
-    bestOverallCommand = bestOverallCommand + ' --asset_capital=' + argv.asset_capital + ' --currency_capital=' + argv.currency_capital
+    // let bestOverallCommand = generateCommandParams(bestOverallResult[0])
+    // bestOverallCommand = prefix + bestOverallCommand
+    // bestOverallCommand = bestOverallCommand + ' --asset_capital=' + argv.asset_capital + ' --currency_capital=' + argv.currency_capital
 
     saveLaunchFiles(generateLaunchFile, bestOverallResult[0])
 
@@ -371,6 +374,7 @@ if (simArgs.help || !(simArgs.use_strategies)) {
   console.log('--days=<int>  amount of days to use when backfilling')
   console.log('--noStatSave=<true>|<false>')
   console.log('--runGenerations=<int>  if used run this number of generations, will be shown 1 less due to generations starts at 0')
+  console.log('--minTrades=<int>  Minimum wins before generation is considured fit to evolve')
   process.exit(0)
 }
 
@@ -396,7 +400,8 @@ noStatSave = (simArgs.noStatSave) ? true : false
 
 let strategyName = (argv.use_strategies) ? argv.use_strategies : 'all'
 populationSize = (argv.population) ? argv.population : 100
-floatScanWindow = (argv.floatScanWindow) ? argv.floatScanWindow : false
+minimumTrades = (argv.minTrades) ? argv.minTrades : 0
+//floatScanWindow = (argv.floatScanWindow) ? argv.floatScanWindow : false
 ignoreLaunchFitness = (argv.ignoreLaunchFitness) ? argv.ignoreLaunchFitness : false
 
 population_data = argv.population_data || `backtest.${simArgs.selector.toLowerCase()}.${moment().format('YYYYMMDDHHmmss')}`
@@ -419,7 +424,8 @@ for (var i = 0; i < selectedStrategies.length; i++) {
     let population = []
 
     for (var i2 = population.length; i2 < populationSize; ++i2) {
-      population.push(Phenotypes.create(strategyPhenotypes))
+      var lPheno = Phenotypes.create(strategyPhenotypes)
+      population.push(lPheno)
       evolve = false
     }
 
