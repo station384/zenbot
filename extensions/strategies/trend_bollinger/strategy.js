@@ -97,6 +97,7 @@ module.exports = {
     buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
     profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0,0.1),
     profit_stop_pct: Phenotypes.RangeFactor(0.0, 20.0,0.1),
+    rsi_periods: Phenotypes.Range(6, 16),
 
     // -- strategy
     bollinger_size: Phenotypes.RangeFactor(1, 40, 1),

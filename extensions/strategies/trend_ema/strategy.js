@@ -104,6 +104,7 @@ module.exports = {
     buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
     profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0,0.1),
     profit_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
+    rsi_periods: Phenotypes.Range(6, 16),
 
     // -- strategy
     trend_ema: Phenotypes.Range(1, 40),

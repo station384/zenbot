@@ -178,18 +178,19 @@ module.exports = {
     markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
     markup_sell_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
     order_type: Phenotypes.ListOption(['maker', 'taker']),
-    sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
-    buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
-    profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0,0.1),
-    profit_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
+    sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
+    buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
+    profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0, 0.1),
+    profit_stop_pct: Phenotypes.RangeFactor(0.0, 50.0, 0.1),
+    rsi_periods: Phenotypes.Range(6, 16),
 
     // -- strategy
     wavetrend_channel_length: Phenotypes.Range(1,20),
     wavetrend_average_length: Phenotypes.Range(1,42),
-    wavetrend_overbought_1: Phenotypes.Range(1, 100),
-    wavetrend_overbought_2: Phenotypes.Range(1,100),
-    wavetrend_oversold_1: Phenotypes.Range(-100,0),
-    wavetrend_oversold_2: Phenotypes.Range(-100,0),
+    wavetrend_overbought_1: Phenotypes.Range(30, 100),
+    wavetrend_overbought_2: Phenotypes.Range(30, 100),
+    wavetrend_oversold_1: Phenotypes.Range(-100, 30),
+    wavetrend_oversold_2: Phenotypes.Range(-100, 30),
     wavetrend_trends: Phenotypes.ListOption([true, false])
   }
 }
