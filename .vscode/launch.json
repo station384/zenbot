@@ -51,14 +51,15 @@
                 "--selector=gdax.btc-usd",
                 "--asset_capital=0.0",
                 "--currency_capital=100.0",
-                "--use_strategies=trend_bollinger,trend_ema,wavetrend",
+                "--use_strategies=trend_ema",
+                //trend_bollinger,trend_ema,
                 "--population=100",
                 "--population_data=",
                 "--days=1",
                 "--order_type=maker",
 
 
-                 "--silent", "--maxCores=7",  "--generateLaunch", "--noStatSave", "--ignoreLaunchFitness", "--overbought_rsi=70", "--oversold_rsi=30",  "--min_periods=25", "--minTrades=2"
+                  "--maxCores=7",  "--generateLaunch", "--noStatSave", "--ignoreLaunchFitness", "--overbought_rsi=70", "--oversold_rsi=30",  "--min_periods=25", "--minTrades=2"
 
                 ]
         },

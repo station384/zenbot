@@ -117,7 +117,7 @@ module.exports = {
   onPeriod: function (s, cb) {
 
 
-   //    == Debugging ==
+    //    == Debugging ==
 
     if (s.options.debug) {console.log('\n== Options ==')}
 
@@ -195,13 +195,13 @@ module.exports = {
     //General Options
     period_length: Phenotypes.RangePeriod(45, 240, 'm'),
     min_periods: Phenotypes.Range(150, 150), //Needs to be greater than senkouSpanPeriods
-    markdown_buy_pct: Phenotypes.RangeFloat(0, 0),
-    markup_sell_pct: Phenotypes.RangeFloat(0, 0),
+    markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
+    markup_sell_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
     order_type: Phenotypes.ListOption(['maker', 'taker']),
-    sell_stop_pct: Phenotypes.Range0(1, 50),
-    buy_stop_pct: Phenotypes.Range0(1, 50),
-    profit_stop_enable_pct: Phenotypes.Range(1, 20),
-    profit_stop_pct: Phenotypes.Range(1,10),
+    sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
+    buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
+    profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0, 0.1),
+    profit_stop_pct: Phenotypes.RangeFactor(0.0, 50.0, 0.1),
 
     //Strategy Specific
     buyLevel: Phenotypes.RangeFactor(5, 100, 5),
@@ -271,7 +271,7 @@ function valueAboveKumo(s, val, key1, key2) {
 }
 
 function valueAbove(val, target1, target2) {
-    return val > Math.max(target1, target2)
+  return val > Math.max(target1, target2)
 }
 
 function valueBelow(val, target1, target2) {
