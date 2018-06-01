@@ -39,3 +39,6 @@ gen.*.bat
 gen.*.sh
 .env
 scripts/auto_backtester/backtesting_*.csv
+
+
+*.log
