@@ -95,19 +95,19 @@ module.exports =  {
 
   phenotypes: {
     // -- common
-    period_length: Phenotypes.RangePeriod(1, 120, 'm'),
-    min_periods: Phenotypes.Range(2, 100),
-    markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
-    markup_sell_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
+    period_length: Phenotypes.ListOption(['1m', '5m','15m','30m','1h']),
+    min_periods: Phenotypes.Range(50, 100),
+    markdown_buy_pct: Phenotypes.RangeFactor(-0.1, 0.1, 0.01),
+    markup_sell_pct: Phenotypes.RangeFactor(-0.1, 0.1, 0.01),
     order_type: Phenotypes.ListOption(['maker', 'taker']),
     sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
     buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
-    profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0, 0.1),
-    profit_stop_pct: Phenotypes.RangeFactor(0.0, 50.0, 0.1),
+    //profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0, 0.1),
+    //profit_stop_pct: Phenotypes.RangeFactor(0.0, 30.0, 0.1),
 
     // -- strategy
-    sar_af: Phenotypes.RangeFloat(0.01, 1.0),
-    sar_max_af: Phenotypes.RangeFloat(0.01, 1.0)
+    sar_af: Phenotypes.RangeFactor(0.1, 1.0, 0.001),
+    sar_max_af: Phenotypes.RangeFactor(0.001, 1.0, 0.001)
   }
 }
 

@@ -15,7 +15,7 @@ module.exports = {
     this.option('period_length', 'period length, same as --period', String, '30m')
 
     this.option('alpha', '', Number, 0.07)
-    this.option('price_source', '', String, 'HAohlc4')
+    this.option('price_source', '', String, 'hlc3')
   },
 
   calculate: function () {},

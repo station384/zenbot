@@ -20,16 +20,33 @@
             "console": "integratedTerminal",
             "program": "${workspaceFolder}/zenbot.js",
             "cwd": "${workspaceFolder}",
-            "args": [ "trade", "gdax.btc-usd", "--paper", "--period=1m"]
+            "args": [ "trade", "binance.bnb-usdt", "--paper", "--period=1m"]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Zenbot Sim",
-            "console": "externalTerminal",
+            "name": "Launch Zenbot Sim srsi_bollinger",
+            "console": "integratedTerminal",
             "program": "${workspaceFolder}/zenbot.js",
             "cwd": "${workspaceFolder}",
-            "args": [ "sim", "bittrex.omg-btc", "--paper", "--period=1m"]
+            "args": [ "sim", "binance.bnb-usdt",  "--period=1m", "--strategy=srsi_bollinger","--order_type=maker"]
+        },        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Zenbot Sim srsi_neural",
+            "console": "integratedTerminal",
+            "program": "${workspaceFolder}/zenbot.js",
+            "cwd": "${workspaceFolder}",
+            "args": [ "sim", "binance.bnb-usdt",  "--period=5m", "--strategy=srsi_neural","--order_type=maker"]
+        },   
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Zenbot Sim wavetrend",
+            "console": "integratedTerminal",
+            "program": "${workspaceFolder}/zenbot.js",
+            "cwd": "${workspaceFolder}",
+            "args": [ "sim", "binance.bnb-usdt",  "--period=1m", "--strategy=wavetrend","--order_type=maker"]
         },
         {
             "type": "node",
@@ -48,18 +65,30 @@
             "program": "${workspaceFolder}/scripts/genetic_backtester/darwin.js",
             "cwd": "${workspaceFolder}",
             "args": [
-                "--selector=gdax.btc-usd",
+                "--selector=binance.bnb-usdt",
                 "--asset_capital=0.0",
                 "--currency_capital=100.0",
-                "--use_strategies=trend_ema",
+                "--use_strategies=srsi_bollinger",
                 //trend_bollinger,trend_ema,
                 "--population=100",
                 "--population_data=",
-                "--days=1",
+                "--days=15",
                 "--order_type=maker",
+                "--markup_sell_pct=0.9",
+                "--markdown_buy_pct=0.9",
+                "--sell_stop_pct=3",
+                "--buy_stop_pct=8",
+                "--period_length=10m",
 
 
-                  "--maxCores=7",  "--generateLaunch", "--noStatSave", "--ignoreLaunchFitness", "--overbought_rsi=70", "--oversold_rsi=30",  "--min_periods=25", "--minTrades=2"
+                  "--maxCores=7",  
+                  "--generateLaunch", 
+                  "--noStatSave", 
+                  "--ignoreLaunchFitness", 
+                  "--overbought_rsi=70", 
+                  "--oversold_rsi=30",  
+                  "--min_periods=25", 
+                  "--minTrades=2"
 
                 ]
         },

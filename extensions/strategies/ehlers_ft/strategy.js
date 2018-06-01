@@ -44,10 +44,10 @@ module.exports = {
   description: '',
 
   getOptions: function() {
-    this.option('period_length', 'period length, same as --period', String, '30m')
-    this.option('fish_pct_change', 'percent change of fisher transform for reversal', Number, 0)
+    this.option('period_length', 'period length, same as --period', String, '5m')
+    this.option('fish_pct_change', 'percent change of fisher transform for reversal', Number, 5)
     this.option('length', 'number of past periods to use including current', Number, 10)
-    this.option('src', 'use period.close if not defined. can be hl2, hlc3, ohlc4, HAhlc3, HAohlc4', String, 'hl2')
+    this.option('src', 'use period.close if not defined. can be hl2, hlc3, ohlc4, HAhlc3, HAohlc4', String, 'HAohlc4')
     this.option('pos_length', 'check this number of previous periods have opposing pos value', Number, 1)
   },
 
@@ -123,7 +123,7 @@ module.exports = {
   phenotypes: {
 
     //General Options
-    period_length: Phenotypes.RangePeriod(5, 300, 'm'),
+    period_length: Phenotypes.ListOption(['5m', '10m', '15m', '30m', '60m']),//Phenotypes.RangePeriod(5, 30, 'm'),
     min_periods: Phenotypes.Range(10, 40),
     markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),
     markup_sell_pct: Phenotypes.RangeFactor(-1.0, 5.0, 0.1),

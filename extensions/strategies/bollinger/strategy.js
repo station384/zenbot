@@ -74,10 +74,10 @@ module.exports = {
     rsi_periods: Phenotypes.Range(6, 16),
 
     // -- strategy
-    bollinger_size: Phenotypes.RangeFactor(1, 40, 1),
+    bollinger_size: Phenotypes.RangeFactor(1, 30, 1),
     bollinger_time: Phenotypes.RangeFactor(1.0, 14.0, 0.1),
-    bollinger_upper_bound_pct: Phenotypes.RangeFactor(-1.0, 30.0, 0.1),
-    bollinger_lower_bound_pct: Phenotypes.RangeFactor(-1.0, 30.0, 0.1)
+    bollinger_upper_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 0.1),
+    bollinger_lower_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 0.1)
   }
 }
 
