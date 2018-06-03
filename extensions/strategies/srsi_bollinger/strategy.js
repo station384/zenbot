@@ -32,7 +32,7 @@ module.exports = {
   calculate: function (s) {
     // compute Stochastic RSI
     // if (s.options.srsi_periods > s.options.rsi_periods) {s.options.srsi_periods = s.options.rsi_periods}
-    // if (s.options.srsi_k < s.options.srsi_d) {s.options.srsi_k = s.options.srsi_d}
+    if (s.options.srsi_k < s.options.srsi_d) {s.options.srsi_k = s.options.srsi_d}
     if (last_period == s.period.period_id) return
     bollinger(s, 'bollinger', s.options.bollinger_size)
     srsi(s, 'srsi', s.options.rsi_periods, s.options.srsi_k, s.options.srsi_d)
@@ -48,7 +48,7 @@ module.exports = {
     s.period.divergent = divergent
     s.period._switch = _switch
     s.period.nextdivergent = nextdivergent
-    s.period.recommendBidPricePct =  ((nextdivergent)/Math.E )
+    //s.period.recommendBidPricePct =  ((nextdivergent)/Math.E )
 
 
   },
@@ -62,9 +62,9 @@ module.exports = {
     if (s.in_preroll) return cb()
     if (s.period.bollinger && s.period.srsi_D && s.period.srsi_K) {
       if (s.period.bollinger.upper && s.period.bollinger.lower) {
-        // let upperBound = s.period.bollinger.upper[s.period.bollinger.upper.length-1]
+        let upperBound = s.period.bollinger.upper[s.period.bollinger.upper.length-1]
         let lowerBound = s.period.bollinger.lower[s.period.bollinger.lower.length-1]
-        let midBound = s.period.bollinger.mid[s.period.bollinger.upper.length-1]
+        //let midBound = s.period.bollinger.mid[s.period.bollinger.upper.length-1]
         var divergent =  s.period.divergent//s.divergent
         var nextdivergent = s.period.nextdivergent
         var _switch = s.period._switch//s._switch 
@@ -77,8 +77,8 @@ module.exports = {
       
         if (_switch != 0  ) // && Math.abs(divergent) >=1
         {
-          //if ((s.period.close > (upperBound / 100) * (100 - s.options.bollinger_upper_bound_pct)) && _switch == 1 && s.period.srsi_K > s.options.srsi_k_sell) 
-          if (s.period.close >=  midBound   && nextdivergent <= divergent  && s.period.srsi_K > s.options.srsi_k_sell  )  //&& divergent >= 1 
+          if (s.period.close > ((upperBound / 100) * (100 - s.options.bollinger_upper_bound_pct)) && nextdivergent <= divergent && _switch == -1 && s.period.srsi_K > s.options.srsi_k_sell) 
+          // if (s.period.close >=  midBound   && nextdivergent <= divergent  && s.period.srsi_K > s.options.srsi_k_sell  )  //&& divergent >= 1 
           {
             // if(s.my_trades.length > 0)
             // if(s.my_trades[s.my_trades.length-1].price < s.period.close) 
@@ -86,8 +86,8 @@ module.exports = {
             s.signal = 'sell'
           } 
           // if ((s.period.close < (lowerBound / 100) * (100 + s.options.bollinger_lower_bound_pct)) && _switch == -1 && s.period.srsi_K < s.options.srsi_k_buy) 
-          //if (s.period.close <= (lowerBound * s.options.bollinger_lower_bound_pct)  && nextdivergent > divergent     && s.period.srsi_K < s.options.srsi_k_buy) // && divergent <= -1
-          if (s.period.close <= lowerBound   && nextdivergent >= divergent     && s.period.srsi_K < s.options.srsi_k_buy) // && divergent <= -1
+          if (s.period.close <= ((lowerBound / 100) * (100 + s.options.bollinger_lower_bound_pct))  && nextdivergent >= divergent  && _switch == 1    && s.period.srsi_K < s.options.srsi_k_buy) // && divergent <= -1
+          //if (s.period.close <= lowerBound   && nextdivergent >= divergent     && s.period.srsi_K < s.options.srsi_k_buy) // && divergent <= -1
   
           {
             s.signal = 'buy'
@@ -129,30 +129,32 @@ module.exports = {
     return cols
   },
 
-  phenotypes: {
-    // -- common
-    period_length: Phenotypes.ListOption(['1m', '5m', '10m','15m','30m','45m','60m']),
-    //min_periods: Phenotypes.Range(1, 200),
-    markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 1.0, 0.1),
-    markup_sell_pct: Phenotypes.RangeFactor(-1.0, 1.0, 0.1),
-    order_type: Phenotypes.ListOption(['maker', 'taker']),
-    sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
-    buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
-    //profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0, 0.1),
-    //profit_stop_pct: Phenotypes.RangeFactor(0.0, 50.0, 0.1),
+  phenotypes: 
+        {
+          // -- common
+          period_length: Phenotypes.ListOption(['1m', '5m', '10m','15m','30m','45m','60m']),
+          min_periods: Phenotypes.Range(1, 200),
+          markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 1.0, 0.1),
+          markup_sell_pct: Phenotypes.RangeFactor(-1.0, 1.0, 0.1),
+          order_type: Phenotypes.ListOption(['maker', 'taker']),
+          sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
+          buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
+          profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0, 0.1),
+          profit_stop_pct: Phenotypes.RangeFactor(0.0, 50.0, 0.1),
 
-    // -- strategy
-    rsi_periods: Phenotypes.Range(2, 20),
-    srsi_periods: Phenotypes.Range(2, 20),
-    srsi_k: Phenotypes.Range(2, 3),
-    srsi_d: Phenotypes.Range(4, 6),
-    srsi_k_sell: Phenotypes.RangeFactor(60.0, 90.0, 1.0),
-    srsi_k_buy: Phenotypes.RangeFactor(0.0, 40.0, 1.0),
+          // -- strategy
+          rsi_periods: Phenotypes.Range(2, 20),
+          srsi_periods: Phenotypes.Range(2, 20),
+          srsi_k: Phenotypes.Range(1, 50),
+          srsi_d: Phenotypes.Range(1, 50),
+          srsi_k_sell: Phenotypes.RangeFactor(60.0, 90.0, 1.0),
+          srsi_k_buy: Phenotypes.RangeFactor(0.0, 40.0, 1.0),
 
 
-    bollinger_size: Phenotypes.RangeFactor(10, 25, 1),
-    bollinger_time: Phenotypes.RangeFactor(0.5, 16.0, 0.1),
-    //bollinger_upper_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
-    //bollinger_lower_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 1.0)
-  }
+          bollinger_size: Phenotypes.RangeFactor(10, 25, 1),
+          bollinger_time: Phenotypes.RangeFactor(0.5, 16.0, 0.1),
+          bollinger_upper_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+          bollinger_lower_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 1.0)
+  
+        }
 }

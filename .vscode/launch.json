@@ -29,8 +29,18 @@
             "console": "integratedTerminal",
             "program": "${workspaceFolder}/zenbot.js",
             "cwd": "${workspaceFolder}",
-            "args": [ "sim", "binance.bnb-usdt",  "--period=1m", "--strategy=srsi_bollinger","--order_type=maker"]
-        },        {
+            "args": [ "sim", "gdax.eth-btc",  
+                "--period=5m", 
+                "--strategy=srsi_bollinger",
+                "--order_type=maker", 
+                "--currency_capital=0.04",
+            "--srsi_k=30",
+        "--srsi_d=50",
+        "--keep_lookback_periods=100",
+       ]
+        },        
+        
+        {
             "type": "node",
             "request": "launch",
             "name": "Launch Zenbot Sim srsi_neural",
