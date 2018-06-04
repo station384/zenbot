@@ -34,8 +34,8 @@
                 "--strategy=srsi_bollinger",
                 "--order_type=maker", 
                 "--currency_capital=0.04",
-            "--srsi_k=30",
-        "--srsi_d=50",
+            "--srsi_k=5",
+        "--srsi_d=3",
         "--keep_lookback_periods=100",
        ]
         },        
