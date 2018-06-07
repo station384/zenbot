@@ -4,7 +4,7 @@ let z = require('zero-fill')
   , ta_bollinger = require('../../../lib/ta_bollinger')
   , Phenotypes = require('../../../lib/phenotype')
 module.exports = {
-  name: 'srsi_bollinger',
+  name: 'stoch_bollinger',
   description: 'Stochastic BollingerBand Strategy',
 
   getOptions: function () {
@@ -149,13 +149,14 @@ module.exports = {
           profit_stop_pct: Phenotypes.RangeFactor(0.0, 50.0, 0.1),
 
           // -- strategy
-          rsi_periods: Phenotypes.Range(10, 20),
-          srsi_periods: Phenotypes.Range(5, 30),
-          srsi_k: Phenotypes.Range(1, 30),
-          srsi_d: Phenotypes.Range(1, 30),
-          srsi_k_sell: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
-          srsi_k_buy: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
-          srsi_dType:  Phenotypes.ListOption(['SMA','EMA','WMA','DEMA','TEMA','TRIMA','KAMA','MAMA','T3']),
+          rsi_periods: Phenotypes.Range(10, 30),
+          stoch_periods: Phenotypes.Range(5, 30),
+          stoch_k: Phenotypes.Range(1, 10),
+          stoch_k_ma_type: Phenotypes.ListOption(['SMA','EMA','WMA','DEMA','TEMA','TRIMA','KAMA','MAMA','T3']),
+          stoch_d: Phenotypes.Range(1, 10),
+          stoch_k_sell: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+          stoch_k_buy: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+          stoch_d_ma_type:  Phenotypes.ListOption(['SMA','EMA','WMA','DEMA','TEMA','TRIMA','KAMA','MAMA','T3']),
 
 
 
