@@ -75,7 +75,8 @@ module.exports = {
             s.signal = null
             if (_switch != 0  ) // && Math.abs(divergent) >=1
             {
-              if (s.period.close > ((upperBound / 100) * (100 - s.options.bollinger_upper_bound_pct)) && nextdivergent <= divergent && _switch == -1 && s.period.srsi_K > s.options.srsi_k_sell) 
+              if (s.period.close > midBound && nextdivergent < divergent && _switch == -1 && s.period.srsi_K > s.options.srsi_k_sell) 
+              //((upperBound / 100) * (100 - s.options.bollinger_upper_bound_pct))
               {
                 s.signal = 'sell'
               } 
