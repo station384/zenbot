@@ -1,6 +1,6 @@
 var z = require('zero-fill')
   , n = require('numbro')
-  //, tulip_bollinger = require('../../../lib/tulip_bollinger')
+  , tulip_bollinger = require('../../../lib/tulip_bollinger')
   , Phenotypes = require('../../../lib/phenotype')
 
 module.exports = {
@@ -15,41 +15,52 @@ module.exports = {
     this.option('bollinger_upper_bound_pct', 'pct the current price should be near the bollinger upper bound before we sell', Number, 0)
     this.option('bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 0)
   },
-
-  calculate: async function (s) {
-    // calculate Bollinger Bands
-    // bollinger(s, 'bollinger', s.options.bollinger_size)
-
-    return new Promise((resolve, reject) => {
-      resolve(s)
-      reject()
-      
-    })
+ 
+  calculate:  function (s) {
+    if (s.in_preroll) return 
   },
 
   onPeriod: function (s, cb) {
-    if (s.period.bollinger) {
-      if (s.period.bollinger.upper && s.period.bollinger.lower) {
-        let upperBound = s.period.bollinger.upper[s.period.bollinger.upper.length-1]
-        let lowerBound = s.period.bollinger.lower[s.period.bollinger.lower.length-1]
-        if (s.period.close > (upperBound / 100) * (100 - s.options.bollinger_upper_bound_pct)) {
-          s.signal = 'sell'
-        } else if (s.period.close < (lowerBound / 100) * (100 + s.options.bollinger_lower_bound_pct)) {
-          s.signal = 'buy'
-        } else {
-          s.signal = null // hold
+    
+    tulip_bollinger(s,'tulip_bollinger', s.options.bollinger_size, s.options.bollinger_time).
+      then(function(result)
+      {
+        if (!result) cb()
+        let bollinger = {
+          LowerBand: result.LowerBand[result.LowerBand.length-1],
+          MiddleBand: result.MiddleBand[result.MiddleBand.length-1],
+          UpperBand: result.UpperBand[result.UpperBand.length-1]
         }
-      }
-    }
-    cb()
+        s.period.report = bollinger
+        if (bollinger.UpperBand) {
+          let upperBound = bollinger.UpperBand
+          let lowerBound = bollinger.LowerBand
+          if (s.period.close > (upperBound / 100) * (100 - s.options.bollinger_upper_bound_pct)) {
+            s.signal = 'sell'
+          } else if (s.period.close < (lowerBound / 100) * (100 + s.options.bollinger_lower_bound_pct)) {
+            s.signal = 'buy'
+          } else {
+            s.signal = null // hold
+          }
+          
+        }
+        cb()
+      }).catch(function(){
+        s.signal = null // hold
+        cb()
+      })
+ 
+
+
+   
   },
 
   onReport: function (s) {
     var cols = []
-    if (s.period.bollinger) {
-      if (s.period.bollinger.upper && s.period.bollinger.lower) {
-        let upperBound = s.period.bollinger.upper[s.period.bollinger.upper.length-1]
-        let lowerBound = s.period.bollinger.lower[s.period.bollinger.lower.length-1]
+    if (s.period.report) {
+      if (s.period.report.UpperBand && s.period.report.LowerBand) {
+        let upperBound = s.period.report.UpperBand
+        let lowerBound = s.period.report.LowerBand
         var color = 'grey'
         if (s.period.close > (upperBound / 100) * (100 - s.options.bollinger_upper_bound_pct)) {
           color = 'green'
