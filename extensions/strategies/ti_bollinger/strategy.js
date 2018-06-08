@@ -1,10 +1,10 @@
 var z = require('zero-fill')
   , n = require('numbro')
-  , tulip_bollinger = require('../../../lib/tulip_bollinger')
+  , tulip_bollinger = require('../../../lib/ti_bollinger')
   , Phenotypes = require('../../../lib/phenotype')
 
 module.exports = {
-  name: 'tulip_bollinger',
+  name: 'ti_bollinger',
   description: 'Buy when (Signal ≤ Lower Bollinger Band) and sell when (Signal ≥ Upper Bollinger Band).',
 
   getOptions: function () {

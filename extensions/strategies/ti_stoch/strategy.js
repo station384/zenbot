@@ -1,6 +1,6 @@
 var z = require('zero-fill')
   , n = require('numbro')
-  , tulip_stoch = require('../../../lib/tulip_stoch')
+  , tulip_stoch = require('../../../lib/ti_stoch')
   , Phenotypes = require('../../../lib/phenotype')
 
 module.exports = {
