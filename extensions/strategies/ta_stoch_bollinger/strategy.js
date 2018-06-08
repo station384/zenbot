@@ -4,7 +4,7 @@ let z = require('zero-fill')
   , ta_bollinger = require('../../../lib/ta_bollinger')
   , Phenotypes = require('../../../lib/phenotype')
 module.exports = {
-  name: 'stoch_bollinger',
+  name: 'ta_stoch_bollinger',
   description: 'Stochastic BollingerBand Strategy',
 
   getOptions: function () {
