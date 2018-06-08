@@ -4,7 +4,7 @@ var z = require('zero-fill')
   , Phenotypes = require('../../../lib/phenotype')
 
 module.exports = {
-  name: 'tulip_stoch',
+  name: 'ti_stoch',
   description: 'Buy when (Signal ≤ srsi_k_buy) and sell when (Signal ≥ srsi_k_sell).  (this should not be used alone.  you will lose over time)',
 
   getOptions: function () {
