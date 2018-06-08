@@ -14,8 +14,8 @@ module.exports = {
     this.option('stoch_kperiods', 'number of RSI periods', Number, 9)
     this.option('stoch_k', '%D line', Number, 3)
     this.option('stoch_d', '%D line', Number, 3)
-    this.option('srsi_k_sell', 'K must be above this before selling', Number, 80)
-    this.option('srsi_k_buy', 'K must be below this before buying', Number, 10)
+    this.option('stoch_k_sell', 'K must be above this before selling', Number, 80)
+    this.option('stoch_k_buy', 'K must be below this before buying', Number, 10)
   },
  
   calculate:  function (s) {
@@ -46,12 +46,12 @@ module.exports = {
         s.signal = null
         if (_switch != 0  ) 
         {
-          if (_switch == -1 && s.period.srsi_K > s.options.srsi_k_sell) 
+          if (_switch == -1 && s.period.srsi_K > s.options.stoch_k_sell) 
           {
             s.signal = 'sell'
           } 
           else
-          if (  nextdivergent >= divergent  && _switch == 1    && s.period.srsi_K < s.options.srsi_k_buy) 
+          if (  nextdivergent >= divergent  && _switch == 1    && s.period.srsi_K < s.options.stoch_k_buy) 
           //
           {
             s.signal = 'buy'
@@ -93,13 +93,14 @@ module.exports = {
     buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.01),
     profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0,0.1),
     profit_stop_pct: Phenotypes.RangeFactor(0.0, 20.0,0.1),
-    rsi_periods: Phenotypes.Range(6, 16),
 
     // -- strategy
-    bollinger_size: Phenotypes.RangeFactor(1, 30, 1),
-    bollinger_time: Phenotypes.RangeFactor(1.0, 14.0, 0.1),
-    bollinger_upper_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 0.1),
-    bollinger_lower_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 0.1)
+    rsi_periods: Phenotypes.Range(10, 30),
+    stoch_periods: Phenotypes.Range(5, 30),
+    stoch_k: Phenotypes.Range(1, 10),
+    stoch_d: Phenotypes.Range(1, 10),
+    stoch_k_sell: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+    stoch_k_buy: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
   }
 }
 
