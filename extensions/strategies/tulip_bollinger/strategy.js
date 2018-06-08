@@ -8,10 +8,10 @@ module.exports = {
   description: 'Buy when (Signal ≤ Lower Bollinger Band) and sell when (Signal ≥ Upper Bollinger Band).',
 
   getOptions: function () {
-    this.option('period', 'period length, same as --period_length', String, '1h')
-    this.option('period_length', 'period length, same as --period', String, '1h')
-    this.option('bollinger_size', 'period size', Number, 20)
-    this.option('bollinger_time', 'times of standard deviation between the upper band and the moving averages', Number, 2)
+    this.option('period', 'period length, same as --period_length', String, '5m')
+    this.option('period_length', 'period length, same as --period', String, '5m')
+    this.option('bollinger_size', 'period size', Number, 14)
+    this.option('bollinger_time', 'times of standard deviation between the upper band and the moving averages', Number, 15)
     this.option('bollinger_upper_bound_pct', 'pct the current price should be near the bollinger upper bound before we sell', Number, 0)
     this.option('bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 0)
   },
