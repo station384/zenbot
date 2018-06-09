@@ -12,11 +12,11 @@ module.exports = {
     this.option('period_length', 'period length, same as --period', String, '5m')
     this.option('min_periods', 'min. number of history periods', Number, 200)
     this.option('rsi_periods', 'number of RSI periods', 14)
-    this.option('stoch_kperiods', 'number of RSI periods', Number, 9)
+    this.option('stoch_kperiods', 'number of RSI periods', Number, 14)
     this.option('stoch_k', '%D line', Number, 3)
     this.option('stoch_d', '%D line', Number, 3)
-    this.option('stoch_k_sell', 'K must be above this before selling', Number, 80)
-    this.option('stoch_k_buy', 'K must be below this before buying', Number, 10)
+    this.option('stoch_k_sell', 'K must be above this before selling', Number, 70)
+    this.option('stoch_k_buy', 'K must be below this before buying', Number, 20)
  
 
     
