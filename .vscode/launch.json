@@ -25,16 +25,16 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Zenbot Sim srsi_bollinger",
+            "name": "Launch Zenbot Sim sutton",
             "console": "integratedTerminal",
             "program": "${workspaceFolder}/zenbot.js",
             "cwd": "${workspaceFolder}",
             "args": [ "sim", "binance.bnb-usdt",  
-                "--period=1m", 
+            
                 "--rsi_periods=14",
                 
                 "--min_periods=1",
-                "--strategy=stoch_bollinger",
+                "--strategy=sutton",
                 "--order_type=maker", 
                 "--currency_capital=44",
                 "--keep_lookback_periods=100",
