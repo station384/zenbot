@@ -30,9 +30,7 @@
             "program": "${workspaceFolder}/zenbot.js",
             "cwd": "${workspaceFolder}",
             "args": [ "sim", "binance.bnb-usdt",  
-            
                 "--rsi_periods=14",
-                
                 "--min_periods=1",
                 "--strategy=sutton",
                 "--order_type=maker", 

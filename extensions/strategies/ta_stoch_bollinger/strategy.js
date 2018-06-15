@@ -19,10 +19,6 @@ module.exports = {
     this.option('stoch_d_ma_type','Type of Moving Average for Slow-D : SMA,EMA,WMA,DEMA,TEMA,TRIMA,KAMA,MAMA,T3', String, 'SMA'),
     this.option('stoch_k_sell', 'K must be above this before selling', Number, 70)
     this.option('stoch_k_buy', 'K must be below this before buying', Number, 30)
- 
-
-    //'SMA','EMA','WMA','DEMA','TEMA','TRIMA','KAMA','MAMA','T3'
-    
     
     this.option('bollinger_size', 'period size', Number, 14)
     this.option('bollinger_updev', '', Number, 2)
@@ -30,24 +26,16 @@ module.exports = {
     this.option('bollinger_dType','mode: : SMA,EMA,WMA,DEMA,TEMA,TRIMA,KAMA,MAMA,T3', String, 'SMA')
     this.option('bollinger_upper_bound_pct', 'pct the current price should be near the bollinger upper bound before we sell', Number,0)
     this.option('bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 0)
-
-
   },
  
 
-  calculate: function (s) {
-    
+  calculate: function (s) { 
     if (s.in_preroll) return 
-
   },
 
   onPeriod: function (s, cb) {
     //make sure we have all values
-    // compute Stochastic RSI
     if (s.in_preroll) return cb()
-    //bollinger(s, 'bollinger', s.options.bollinger_size)
-
-
     ta_bollinger(s,'tabollinger',s.options.bollinger_size, s.options.bollinger_updev, s.options.bollinger_dndev, s.options.bollinger_dType).
       then(function(inbol){
         ta_stoch(s, 'stoch',  s.options.stoch_periods, s.options.stoch_k, s.options.stoch_k_ma_type, s.options.stoch_d, s.options.stoch_d_ma_type).
@@ -58,7 +46,7 @@ module.exports = {
             s.period.stoch_D = inres.d[inres.d.length-1]
             s.period.stoch_K = inres.k[inres.k.length-1]
             var last_divergent = inres.k[inres.k.length-2] - inres.d[inres.d.length-2]
-            var _switch = 0//s.lookback[0]._switch
+            var _switch = 0
             var nextdivergent = (( divergent + last_divergent ) /2) + (divergent - last_divergent) 
             if ((last_divergent <= 0 && (divergent > 0)) ) _switch = 1 // price rising 
             if ((last_divergent >= 0 && (divergent < 0)) ) _switch = -1 // price falling
@@ -66,8 +54,6 @@ module.exports = {
             s.period.divergent = divergent
             s.period._switch = _switch
            
-
-               
             let upperBound = inbol.outRealUpperBand[inbol.outRealUpperBand.length-1] 
             let lowerBound = inbol.outRealLowerBand[inbol.outRealLowerBand.length-1] 
             let midBound =inbol.outRealMiddleBand[inbol.outRealMiddleBand.length-1]
@@ -81,21 +67,17 @@ module.exports = {
             // K is fast moving
   
             s.signal = null
-            if (_switch != 0  ) // && Math.abs(divergent) >=1
+            if (_switch != 0  ) 
             {
               if (s.period.close >= midBound && s.period.close >= ((upperBound / 100) * (100 +  s.options.bollinger_upper_bound_pct)) && nextdivergent < divergent && _switch == -1 && s.period.stoch_K > s.options.stoch_k_sell) 
-              //
-              //&&  
               {
                 s.signal = 'sell'
               } 
               else
               if (s.period.close < (lowerBound / 100) * (100 + s.options.bollinger_lower_bound_pct)   &&  nextdivergent >= divergent  && _switch == 1    && s.period.stoch_K < s.options.stoch_k_buy) 
-              //
               {
                 s.signal = 'buy'
               } 
-             
             }
 
             cb()
@@ -104,9 +86,6 @@ module.exports = {
 
       }).catch(function(){
         cb()})
-    
-    //cb()
-
   },
 
   onReport: function (s) {
@@ -161,11 +140,10 @@ module.exports = {
 
 
           bollinger_size: Phenotypes.RangeFactor(10, 25, 1),
-          // bollinger_time: Phenotypes.RangeFactor(0.5, 16.0, 0.1),
           bollinger_updev: Phenotypes.RangeFactor(1, 3.0, 0.1),
           bollinger_dndev: Phenotypes.RangeFactor(1, 3.0, 0.1),
           bollinger_dType: Phenotypes.ListOption(['SMA','EMA','WMA','DEMA','TEMA','TRIMA','KAMA','MAMA','T3']),
-          //bollinger_upper_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+          bollinger_upper_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           bollinger_lower_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 1.0)
   
         }

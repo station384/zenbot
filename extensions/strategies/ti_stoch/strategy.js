@@ -41,8 +41,6 @@ module.exports = {
         s.period.divergent = divergent
         s.period._switch = _switch
 
-
-      
         s.signal = null
         if (_switch != 0  ) 
         {
@@ -52,7 +50,6 @@ module.exports = {
           } 
           else
           if (  nextdivergent >= divergent  && _switch == 1    && s.period.srsi_K < s.options.stoch_k_buy) 
-          //
           {
             s.signal = 'buy'
           } 
@@ -64,10 +61,7 @@ module.exports = {
         s.signal = null // hold
         return cb()
       })
- 
 
-
-   
   },
 
   onReport: function (s) {

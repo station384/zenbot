@@ -6,8 +6,8 @@ let z = require('zero-fill')
   , ti_bollinger = require('../../../lib/ti_bollinger')
   , Phenotypes = require('../../../lib/phenotype')
 module.exports = {
-  name: 'Sutton-1',
-  description: 'Sutton Adaptive Strategy - 1',
+  name: 'Station-1',
+  description: 'Station Adaptive Strategy - 1',
 
   getOptions: function () {
     this.option('period', 'period length, same as --period_length', String, '5m')

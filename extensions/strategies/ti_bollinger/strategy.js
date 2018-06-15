@@ -49,10 +49,6 @@ module.exports = {
         s.signal = null // hold
         cb()
       })
- 
-
-
-   
   },
 
   onReport: function (s) {

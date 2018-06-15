@@ -43,19 +43,22 @@ module.exports = {
 
   onPeriod: function (s, cb) {
     if (!s.in_preroll)
+    {
       if (typeof s.period.macd_histogram === 'number' && typeof s.lookback[0].macd_histogram === 'number' && typeof s.period.srsi_K === 'number' && typeof s.period.srsi_D === 'number')
       // Buy signal
         if (s.period.macd_histogram >= s.options.up_trend_threshold)
           if (s.period.srsi_K > s.period.srsi_D && s.period.srsi_K > s.lookback[0].srsi_K && s.period.srsi_K < s.options.oversold_rsi)
             s.signal = 'buy'
 
-    // Sell signal
-    if (s.period.macd_histogram < s.options.down_trend_threshold)
-      if (s.period.srsi_K < s.period.srsi_D && s.period.srsi_K < s.lookback[0].srsi_K && s.period.srsi_K > s.options.overbought_rsi)
-        s.signal = 'sell'
+      // Sell signal
+      if (s.period.macd_histogram < s.options.down_trend_threshold)
+        if (s.period.srsi_K < s.period.srsi_D && s.period.srsi_K < s.lookback[0].srsi_K && s.period.srsi_K > s.options.overbought_rsi)
+          s.signal = 'sell'
+    }
+    else{ // Hold
+      s.signal = null
+    }
 
-    // Hold
-    //s.signal = null;
     cb()
   },
   onReport: function (s) {

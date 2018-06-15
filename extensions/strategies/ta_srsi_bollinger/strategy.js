@@ -5,16 +5,16 @@ let z = require('zero-fill')
   , Phenotypes = require('../../../lib/phenotype')
 module.exports = {
   name: 'srsi_bollinger',
-  description: 'Stochastic BollingerBand Strategy',
+  description: 'Stochastic RSI BollingerBand Strategy',
 
   getOptions: function () {
     this.option('period', 'period length, same as --period_length', String, '5m')
     this.option('period_length', 'period length, same as --period', String, '5m')
     this.option('min_periods', 'min. number of history periods', Number, 200)
     this.option('rsi_periods', 'number of RSI periods', 14)
-    this.option('srsi_periods', 'number of RSI periods', 20)
-    this.option('srsi_k', '%D line', Number, 14)
-    this.option('srsi_d', '%D line', Number, 14)
+    this.option('srsi_periods', 'number of Stochastic RSI periods', 14)
+    this.option('srsi_k', '%D line', Number, 5)
+    this.option('srsi_d', '%D line', Number, 3)
     this.option('srsi_k_sell', 'K must be above this before selling', Number, 80)
     this.option('srsi_k_buy', 'K must be below this before buying', Number, 10)
     this.option('srsi_dType','D type mode : SMA,EMA,WMA,DEMA,TEMA,TRIMA,KAMA,MAMA,T3', String, 'SMA'),
@@ -23,11 +23,11 @@ module.exports = {
     
     
     this.option('bollinger_size', 'period size', Number, 20)
-    this.option('bollinger_updev', '', Number, 2)
-    this.option('bollinger_dndev', '', Number, 2)
+    this.option('bollinger_updev', 'Upper Bollinger Time Divisor', Number, 2)
+    this.option('bollinger_dndev', 'Lower Bollinger Time Divisor', Number, 2)
     this.option('bollinger_dType','mode: : SMA,EMA,WMA,DEMA,TEMA,TRIMA,KAMA,MAMA,T3', String, 'SMA')
-    this.option('bollinger_upper_bound_pct', 'pct the current price should be near the bollinger upper bound before we sell', Number, 0.10)
-    this.option('bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 1)
+    this.option('bollinger_upper_bound_pct', 'pct the current price should be near the bollinger upper bound before we sell', Number, 99)
+    this.option('bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 99)
 
 
   },
@@ -41,10 +41,7 @@ module.exports = {
 
   onPeriod: function (s, cb) {
     //make sure we have all values
-    // compute Stochastic RSI
     if (s.in_preroll) return cb()
-    //bollinger(s, 'bollinger', s.options.bollinger_size)
-
 
     ta_bollinger(s,'tabollinger',s.options.bollinger_size, s.options.bollinger_updev, s.options.bollinger_dndev, s.options.bollinger_dType).
       then(function(inbol){
@@ -79,17 +76,14 @@ module.exports = {
             // K is fast moving
   
             s.signal = null
-            if (_switch != 0  ) // && Math.abs(divergent) >=1
+            if (_switch != 0  ) 
             {
               if (s.period.close > midBound && nextdivergent < divergent && _switch == -1 && s.period.srsi_K > s.options.srsi_k_sell) 
-              //((upperBound / 100) * (100 - s.options.bollinger_upper_bound_pct))
-              //&&  
               {
                 s.signal = 'sell'
               } 
               else
               if (s.period.close <= ((lowerBound / 100) * (100 + s.options.bollinger_lower_bound_pct))   &&  nextdivergent >= divergent  && _switch == 1    && s.period.srsi_K < s.options.srsi_k_buy) 
-              //
               {
                 s.signal = 'buy'
               } 
@@ -102,8 +96,6 @@ module.exports = {
 
       }).catch(function(){
         cb()})
-    
-    //cb()
 
   },
 
@@ -159,11 +151,10 @@ module.exports = {
 
 
           bollinger_size: Phenotypes.RangeFactor(10, 25, 1),
-          // bollinger_time: Phenotypes.RangeFactor(0.5, 16.0, 0.1),
           bollinger_updev: Phenotypes.RangeFactor(1, 3.0, 0.1),
           bollinger_dndev: Phenotypes.RangeFactor(1, 3.0, 0.1),
           bollinger_dType: Phenotypes.ListOption(['SMA','EMA','WMA','DEMA','TEMA','TRIMA','KAMA','MAMA','T3']),
-          //bollinger_upper_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+          bollinger_upper_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           bollinger_lower_bound_pct: Phenotypes.RangeFactor(0.0, 100.0, 1.0)
   
         }
