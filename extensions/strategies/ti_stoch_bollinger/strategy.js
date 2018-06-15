@@ -95,10 +95,8 @@ module.exports = {
       let upperBound = s.period.report.UpperBand
       let lowerBound = s.period.report.LowerBand
       var color = 'grey'
-      if (s.period.close > (upperBound / 100) * ( 100 + s.options.bollinger_upper_bound_pct)) { color = 'green'
-      } 
-      if (s.period.close < (lowerBound / 100) * ( 100 - s.options.bollinger_lower_bound_pct)) { color = 'red'
-      }
+      if (s.period.close > (upperBound / 100) * ( 100 + s.options.bollinger_upper_bound_pct)) { color = 'green' } 
+      if (s.period.close < (lowerBound / 100) * ( 100 - s.options.bollinger_lower_bound_pct)) { color = 'red' }
       cols.push(z(8, n(s.period.close).format('+00.0000'), ' ')[color])
       cols.push(z(8, n(lowerBound).format('0.000000').substring(0,7), ' ').cyan)
       cols.push(z(8, n(upperBound).format('0.000000').substring(0,7), ' ').cyan)
