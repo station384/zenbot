@@ -50,7 +50,7 @@
                 "--rsi_periods=14",
                 
                 "--min_periods=1",
-                "--strategy=tulip_bollinger",
+                "--strategy=ti_stoch_bollinger",
                 "--order_type=maker", 
                 "--currency_capital=44",
                 "--keep_lookback_periods=100",
