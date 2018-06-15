@@ -16,11 +16,23 @@ module.exports = {
     this.option('rsi_periods', 'number of RSI periods',Number, 14)
     
     // macd -- used to detect bear and bull markets
-    this.option('short_period', 'number of RSI periods',Number, 12)
-    this.option('long_period', 'number of RSI periods',Number, 26)
-    this.option('signal_period', 'number of RSI periods',Number, 9)
+    this.option('macd_short_period', 'number of RSI periods',Number, 12)
+    this.option('macd_long_period', 'number of RSI periods',Number, 26)
+    this.option('macd_signal_period', 'number of RSI periods',Number, 9)
+    this.option('macd_bull', 'histogram needs to be greater than this value to be considured a bull market (0..-1)', Number, 0.001)
+    this.option('macd_bear', 'histogram needs to be less than this value to be considured a bear market (0..-1)', Number, -0.001)
 
-    // Lots of options.  I would have this as some sort of passed in object using JSON but it needs to be individual for backtesters to work
+    this.option('macd_bull_short', 'signal needs to be this value less than macd to be considured for short trading in a bull market (0..-1)', Number, -0.001)
+    this.option('macd_bull_long', 'signal needs to be this value greater than macd to be considured for long trading in a bull market (0..-1)', Number, 0.001)
+
+    this.option('macd_bear_short', 'signal needs to be this value less than macd to be considured for short trading in a bear market (0..-1)', Number, 0.001)
+    this.option('macd_bear_long', 'signal needs to be this value greater than macd to be considured for long trading in a bear market (0..-1)', Number, -0.001)
+
+
+    //Lots of options.  
+    // I would have this as some sort of passed in object using JSON but it needs to be individual for backtesters to work
+    // each mode can use any combo BullLong can used stoch or stochrsi so both options need to be accepted this goes for the rest of them
+    // If anyone can think of a better way of doing this, and still remain compatable with the backtester please help.
 
     //Bull Long Market.   
     this.option('bll_mode', 'The trigger to use', String, 'stoch') // 'stoch, stochrsi, none, sell, buy'
@@ -136,6 +148,25 @@ module.exports = {
     this.option('brn_bollinger_upper_bound_pct', 'pct the current price should be near the bollinger upper bound before we sell', Number, 50)
     this.option('brn_bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 50)
 
+    // Neutral Market 
+    this.option('n_mode', 'The trigger to use', String, 'stoch')
+    this.option('n_stoch_kperiods', 'number of RSI periods', Number, 9)
+    this.option('n_stoch_k', '%D line', Number, 5)
+    this.option('n_stoch_d', '%D line', Number, 3)
+    this.option('n_stoch_k_sell', 'K must be above this before selling', Number, 60)
+    this.option('n_stoch_k_buy', 'K must be below this before buying', Number, 40)
+
+    this.option('n_stochrsi_kperiods', 'number of RSI periods', Number, 9)
+    this.option('n_stochrsi_k', '%D line', Number, 5)
+    this.option('n_stochrsi_d', '%D line', Number, 3)
+    this.option('n_stochrsi_k_sell', 'K must be above this before selling', Number, 60)
+    this.option('n_stochrsi_k_buy', 'K must be below this before buying', Number, 40)
+
+    this.option('n_bollinger_size', 'period size', Number, 14)
+    this.option('n_bollinger_time', 'times of standard deviation between the upper band and the moving averages', Number, 2)
+    this.option('n_bollinger_upper_bound_pct', 'pct the current price should be near the bollinger upper bound before we sell', Number, 50)
+    this.option('n_bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 50)
+
   },
  
 
@@ -148,16 +179,17 @@ module.exports = {
     // compute Stochastic RSI
     s.period.report = {}
     if (s.in_preroll) return cb()
-    //bollinger(s, 'bollinger', s.options.bollinger_size)
 
-    let lMarket =  s.lookback.slice(0,1000)
-    lMarket = lMarket.map(x=>   { return {period_id: x.period_id, open: x.open, close: x.close, high: x.high, low: x.low, volume: x.volume }})
-    lMarket.reverse()
+    // Map market data 
+    // Do this here once and pass the results into the calculations using and option parameter this reduces the processing time
+    let tMarket =  s.lookback.slice(0,1000)
+    tMarket = tMarket.map(x=> { return {period_id: x.period_id, open: x.open, close: x.close, high: x.high, low: x.low, volume: x.volume }})
+    tMarket.reverse() // ti libs process from oldest to newest
     //add current period
-    let ti =   {period_id: s.period.period_id, open: s.period.open, close: s.period.close, high: s.period.high, low: s.period.low, volume: s.period.volume }
-    lMarket.shift(ti)
+    let tCurrentPeriod = {period_id: s.period.period_id, open: s.period.open, close: s.period.close, high: s.period.high, low: s.period.low, volume: s.period.volume }
+    tMarket.shift(tCurrentPeriod)
 
-    ti_macd(s, 'ti_macd',  s.options.short_period, s.options.long_period, s.options.signal_period,lMarket).
+    ti_macd(s, 'ti_macd',  s.options.macd_short_period, s.options.macd_long_period, s.options.macd_signal_period,tMarket).
       then(function(resMacd){
         //macd fast
         //signal slow
@@ -166,13 +198,12 @@ module.exports = {
         let macd = resMacd.macd[resMacd.macd.length-1]
         let macdHistogram = resMacd.macd_histogram[resMacd.macd_histogram.length-1]
         // macd is fast mover
-        // if(resMacd.macd_histogram[resMacd.macd_histogram.length-1] > 0) {
-        if(macdHistogram    > 0 ) {
+        if(macdHistogram    > s.options.macd_bull ) {
           s.marketPosition = 'bull'
-          if(macd  - macdSignal  < 0.01) {
+          if(macd  - macdSignal  < s.options.macd_bull_short) {
             s.marketPosition = 'bullShort'   // price falling trend rising
           } else
-          if(macd - macdSignal    > 0.01) {
+          if(macd - macdSignal    > s.options.macd_bull_long) {
             s.marketPosition = 'bullLong'    // price rising trend rising
           } else 
           {
@@ -180,13 +211,12 @@ module.exports = {
           }
         }
 
-        // if(resMacd.macd_histogram[resMacd.macd_histogram.length-1] < 0) {
-        if(macdHistogram < 0) {
+        if(macdHistogram < s.options.macd_bear) {
           s.marketPosition = 'bear' 
-          if(macd - macdSignal  > 0.01 ) {
+          if(macd - macdSignal  < s.options.macd_bear_short ) {
             s.marketPosition = 'bearShort'   // price falling trend falling
           } else
-          if(macd - macdSignal  < 0.01 ) {
+          if(macd - macdSignal  > s.options.macd_bear_long ) {
             s.marketPosition = 'bearLong'    // price rising trend falling
           } else 
           {
@@ -199,11 +229,11 @@ module.exports = {
         {
           if(s.options.bll_mode == 'stoch')
           {
-            actOnBollinger_Stoch(s,s.options.bll_bollinger_size, s.options.bll_bollinger_time, s.options.bll_bollinger_upper_bound_pct, s.options.bll_bollinger_lower_bound_pct,s.options.bll_stoch_kperiods, s.options.bll_stoch_k, s.options.bll_stoch_d, s.options.bll_stoch_k_sell, s.options.bll_stoch_k_buy, cb, lMarket)
+            actOnBollinger_Stoch(s,s.options.bll_bollinger_size, s.options.bll_bollinger_time, s.options.bll_bollinger_upper_bound_pct, s.options.bll_bollinger_lower_bound_pct,s.options.bll_stoch_kperiods, s.options.bll_stoch_k, s.options.bll_stoch_d, s.options.bll_stoch_k_sell, s.options.bll_stoch_k_buy, cb, tMarket)
           } else
           if(s.options.bll_mode == 'stochrsi')
           {
-            actOnBollinger_StochRSI (s,s.options.bll_bollinger_size, s.options.bll_bollinger_time, s.options.bll_bollinger_upper_bound_pct, s.options.bll_bollinger_lower_bound_pct, s.options.bll_stochrsi_kperiods, s.options.bll_stochrsi_k, s.options.bll_stochrsi_d, s.options.bll_stochrsi_k_sell, s.options.bll_stochrsi_k_buy, cb, lMarket)
+            actOnBollinger_StochRSI (s,s.options.bll_bollinger_size, s.options.bll_bollinger_time, s.options.bll_bollinger_upper_bound_pct, s.options.bll_bollinger_lower_bound_pct, s.options.bll_stochrsi_kperiods, s.options.bll_stochrsi_k, s.options.bll_stochrsi_d, s.options.bll_stochrsi_k_sell, s.options.bll_stochrsi_k_buy, cb, tMarket)
           } else
           if(s.options.bll_mode == 'none')
           {
@@ -237,7 +267,7 @@ module.exports = {
               s.options.bls_stoch_k_sell, 
               s.options.bls_stoch_k_buy, 
               cb, 
-              lMarket)
+              tMarket)
           } else
           if(s.options.bls_mode == 'stochrsi')
           {
@@ -252,7 +282,7 @@ module.exports = {
               s.options.bls_stochrsi_k_sell, 
               s.options.bls_stochrsi_k_buy, 
               cb, 
-              lMarket)
+              tMarket)
           } else
           if(s.options.bls_mode == 'none')
           {
@@ -286,7 +316,7 @@ module.exports = {
               s.options.bln_stoch_k_sell, 
               s.options.bln_stoch_k_buy, 
               cb, 
-              lMarket)
+              tMarket)
           } else
           if(s.options.bln_mode == 'stochrsi')
           {
@@ -301,7 +331,7 @@ module.exports = {
               s.options.bln_stochrsi_k_sell, 
               s.options.bln_stochrsi_k_buy, 
               cb, 
-              lMarket)
+              tMarket)
           } else
           if(s.options.bln_mode == 'none')
           {
@@ -335,7 +365,7 @@ module.exports = {
               s.options.brl_stoch_k_sell, 
               s.options.brl_stoch_k_buy, 
               cb, 
-              lMarket)
+              tMarket)
           } else
           if(s.options.brl_mode == 'stochrsi')
           {
@@ -350,7 +380,7 @@ module.exports = {
               s.options.brl_stochrsi_k_sell, 
               s.options.brl_stochrsi_k_buy, 
               cb, 
-              lMarket)
+              tMarket)
           } else
           if(s.options.brl_mode == 'none')
           {
@@ -384,7 +414,7 @@ module.exports = {
               s.options.brs_stoch_k_sell, 
               s.options.brs_stoch_k_buy, 
               cb, 
-              lMarket)
+              tMarket)
           } else
           if(s.options.brs_mode == 'stochrsi')
           {
@@ -399,7 +429,7 @@ module.exports = {
               s.options.brs_stochrsi_k_sell, 
               s.options.brs_stochrsi_k_buy, 
               cb, 
-              lMarket)
+              tMarket)
           } else
           if(s.options.brs_mode == 'none')
           {
@@ -433,7 +463,7 @@ module.exports = {
               s.options.brn_stoch_k_sell, 
               s.options.brn_stoch_k_buy, 
               cb, 
-              lMarket)
+              tMarket)
           } else
           if(s.options.brn_mode == 'stochrsi')
           {
@@ -448,7 +478,7 @@ module.exports = {
               s.options.brn_stochrsi_k_sell, 
               s.options.brn_stochrsi_k_buy, 
               cb, 
-              lMarket)
+              tMarket)
           } else
           if(s.options.brn_mode == 'none')
           {
@@ -462,6 +492,56 @@ module.exports = {
             cb()
           }
           if(s.options.brn_mode == 'buy')
+          {
+            s.signal = 'buy'
+            cb()
+          }          
+        }
+        else
+        if( s.marketPosition  == 'neutral') 
+        {
+          if(s.options.n_mode == 'stoch')
+          {
+            actOnBollinger_Stoch(s,
+              s.options.n_bollinger_size, 
+              s.options.n_bollinger_time, 
+              s.options.n_bollinger_upper_bound_pct, 
+              s.options.n_bollinger_lower_bound_pct,
+              s.options.n_stoch_kperiods, 
+              s.options.n_stoch_k, 
+              s.options.n_stoch_d, 
+              s.options.n_stoch_k_sell, 
+              s.options.n_stoch_k_buy, 
+              cb, 
+              tMarket)
+          } else
+          if(s.options.n_mode == 'stochrsi')
+          {
+            actOnBollinger_StochRSI (s,
+              s.options.n_bollinger_size, 
+              s.options.n_bollinger_time, 
+              s.options.n_bollinger_upper_bound_pct, 
+              s.options.n_bollinger_lower_bound_pct, 
+              s.options.n_stochrsi_kperiods, 
+              s.options.n_stochrsi_k, 
+              s.options.n_stochrsi_d, 
+              s.options.n_stochrsi_k_sell, 
+              s.options.n_stochrsi_k_buy, 
+              cb, 
+              tMarket)
+          } else
+          if(s.options.n_mode == 'none')
+          {
+            s.signal = null
+            cb()
+          }
+          else
+          if(s.options.n_mode == 'sell')
+          {
+            s.signal = 'sell'
+            cb()
+          }
+          if(s.options.n_mode == 'buy')
           {
             s.signal = 'buy'
             cb()
@@ -493,26 +573,30 @@ module.exports = {
         if (s.marketPosition == 'bullLong') { 
           color2 = 'yellow' 
           marketMode='BLL'
-        }
+        } else
         if (s.marketPosition == 'bullShort') { 
           color2 = 'yellow'
           marketMode = 'BLS'
-        }
+        } else
         if (s.marketPosition == 'bullNeutral') { 
           color2 = 'grey'
           marketMode = 'BLN'
-        }
+        } else
         if (s.marketPosition == 'bearLong') { 
           color2 = 'red'
           marketMode = 'BRL'                                  
-        }
+        } else
         if (s.marketPosition == 'bearShort') { 
           color2 = 'red' 
           marketMode = 'BRS'
-        }
+        } else
         if (s.marketPosition == 'bearNeutral') { 
           color2 = 'grey' 
           marketMode = 'BRN'
+        } else
+        if (s.marketPosition == 'neutral') { 
+          color2 = 'grey' 
+          marketMode = 'NEU'
         }
 
         cols.push(z(8, n(s.period.close).format('+00.0000'), ' ')[color])
@@ -553,9 +637,19 @@ module.exports = {
 
           // -- strategy
           // macd
-          short_period:Phenotypes.Range(2, 50),
-          long_period:Phenotypes.Range(2, 50),
-          signal_period:Phenotypes.Range(2, 50),
+          macd_short_period:Phenotypes.Range(2, 50),
+          macd_long_period:Phenotypes.Range(2, 50),
+          macd_signal_period:Phenotypes.Range(2, 50),
+          macd_bull:Phenotypes.RangeFactor(-0.00001, 1.0, 0.00001),
+          macd_bear:Phenotypes.RangeFactor(0.00001, -1.0, 0.00001),
+
+      
+          macd_bull_short:Phenotypes.RangeFactor(0.0, -1.0, 0.00001),
+          macd_bull_long:Phenotypes.RangeFactor(0.0, 1.0, 0.00001),
+      
+          macd_bear_short:Phenotypes.RangeFactor(0.0, -1.0, 0.00001),
+          macd_bear_long:Phenotypes.RangeFactor(0.0, 1.0, 0.00001),
+      
 
           // BullLong
           bll_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
@@ -671,6 +765,25 @@ module.exports = {
           brn_bollinger_upper_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           brn_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
   
+
+          // Neutral
+          n_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          n_stoch_kperiods:Phenotypes.Range(5, 30),
+          n_stoch_k:Phenotypes.Range(1, 10),
+          n_stoch_d:Phenotypes.Range(1, 10),
+          n_stoch_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+          n_stoch_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+
+          n_stochrsi_kperiods:Phenotypes.Range(5, 30),
+          n_stochrsi_k:Phenotypes.Range(1, 10),
+          n_stochrsi_d:Phenotypes.Range(1, 10),
+          n_stochrsi_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+          n_stochrsi_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+
+          n_bollinger_size:Phenotypes.RangeFactor(10, 25, 1),
+          n_bollinger_time:Phenotypes.RangeFactor(1, 3.0, 0.1),
+          n_bollinger_upper_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
+          n_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0)
         }
 }
 

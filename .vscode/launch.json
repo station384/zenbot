@@ -32,7 +32,7 @@
             "args": [ "sim", "binance.bnb-usdt",  
                 "--rsi_periods=14",
                 "--min_periods=1",
-                "--strategy=sutton",
+                "--strategy=station",
                 "--order_type=maker", 
                 "--currency_capital=44",
                 "--keep_lookback_periods=100",
