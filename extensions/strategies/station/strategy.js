@@ -229,11 +229,29 @@ module.exports = {
         {
           if(s.options.bll_mode == 'stoch')
           {
-            actOnBollinger_Stoch(s,s.options.bll_bollinger_size, s.options.bll_bollinger_time, s.options.bll_bollinger_upper_bound_pct, s.options.bll_bollinger_lower_bound_pct,s.options.bll_stoch_kperiods, s.options.bll_stoch_k, s.options.bll_stoch_d, s.options.bll_stoch_k_sell, s.options.bll_stoch_k_buy, cb, tMarket)
+            actOnBollinger_Stoch(s,
+              s.options.bll_bollinger_size, 
+              s.options.bll_bollinger_time, 
+              s.options.bll_bollinger_upper_bound_pct, 
+              s.options.bll_bollinger_lower_bound_pct,
+              s.options.bll_stoch_kperiods, 
+              s.options.bll_stoch_k, 
+              s.options.bll_stoch_d, 
+              s.options.bll_stoch_k_sell, 
+              s.options.bll_stoch_k_buy, cb, tMarket)
           } else
           if(s.options.bll_mode == 'stochrsi')
           {
-            actOnBollinger_StochRSI (s,s.options.bll_bollinger_size, s.options.bll_bollinger_time, s.options.bll_bollinger_upper_bound_pct, s.options.bll_bollinger_lower_bound_pct, s.options.bll_stochrsi_kperiods, s.options.bll_stochrsi_k, s.options.bll_stochrsi_d, s.options.bll_stochrsi_k_sell, s.options.bll_stochrsi_k_buy, cb, tMarket)
+            actOnBollinger_StochRSI (s,
+              s.options.bll_bollinger_size, 
+              s.options.bll_bollinger_time, 
+              s.options.bll_bollinger_upper_bound_pct, 
+              s.options.bll_bollinger_lower_bound_pct, 
+              s.options.bll_stochrsi_kperiods, 
+              s.options.bll_stochrsi_k, 
+              s.options.bll_stochrsi_d, 
+              s.options.bll_stochrsi_k_sell, 
+              s.options.bll_stochrsi_k_buy, cb, tMarket)
           } else
           if(s.options.bll_mode == 'none')
           {
