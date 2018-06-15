@@ -658,15 +658,15 @@ module.exports = {
           macd_short_period:Phenotypes.Range(2, 50),
           macd_long_period:Phenotypes.Range(2, 50),
           macd_signal_period:Phenotypes.Range(2, 50),
-          macd_bull:Phenotypes.RangeFactor(-0.00001, 1.0, 0.00001),
-          macd_bear:Phenotypes.RangeFactor(0.00001, -1.0, 0.00001),
+          macd_bull:Phenotypes.RangeFactor(-0.00001, 0.0001, 0.00001),
+          macd_bear:Phenotypes.RangeFactor(0.00001, -0.0001, 0.00001),
 
       
-          macd_bull_short:Phenotypes.RangeFactor(0.0, -1.0, 0.00001),
-          macd_bull_long:Phenotypes.RangeFactor(0.0, 1.0, 0.00001),
+          macd_bull_short:Phenotypes.RangeFactor(0.0, -0.0001, 0.00001),
+          macd_bull_long:Phenotypes.RangeFactor(0.0, 0.0001, 0.00001),
       
-          macd_bear_short:Phenotypes.RangeFactor(0.0, -1.0, 0.00001),
-          macd_bear_long:Phenotypes.RangeFactor(0.0, 1.0, 0.00001),
+          macd_bear_short:Phenotypes.RangeFactor(0.0, -0.0001, 0.00001),
+          macd_bear_long:Phenotypes.RangeFactor(0.0, 0.0001, 0.00001),
       
 
           // BullLong
