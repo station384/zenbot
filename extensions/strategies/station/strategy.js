@@ -36,13 +36,13 @@ module.exports = {
 
     //Bull Long Market.   
     this.option('bll_mode', 'The trigger to use', String, 'stoch') // 'stoch, stochrsi, none, sell, buy'
-    this.option('bll_stoch_kperiods', 'number of RSI periods', Number, 9)
+    this.option('bll_stoch_kperiods', 'number of RSI periods', Number, 14)
     this.option('bll_stoch_k', '%D line', Number, 5)
     this.option('bll_stoch_d', '%D line', Number, 3)
     this.option('bll_stoch_k_sell', 'K must be above this before selling', Number, 60)
     this.option('bll_stoch_k_buy', 'K must be below this before buying', Number, 40)
 
-    this.option('bll_stochrsi_kperiods', 'number of RSI periods', Number, 9)
+    this.option('bll_stochrsi_kperiods', 'number of RSI periods', Number, 14)
     this.option('bll_stochrsi_k', '%D line', Number, 5)
     this.option('bll_stochrsi_d', '%D line', Number, 3)
     this.option('bll_stochrsi_k_sell', 'K must be above this before selling', Number, 60)
@@ -61,7 +61,7 @@ module.exports = {
     this.option('bls_stoch_k_sell', 'K must be above this before selling', Number, 60)
     this.option('bls_stoch_k_buy', 'K must be below this before buying', Number, 40)
 
-    this.option('bls_stochrsi_kperiods', 'number of RSI periods', Number, 9)
+    this.option('bls_stochrsi_kperiods', 'number of RSI periods', Number, 14)
     this.option('bls_stochrsi_k', '%D line', Number, 5)
     this.option('bls_stochrsi_d', '%D line', Number, 3)
     this.option('bls_stochrsi_k_sell', 'K must be above this before selling', Number, 60)
@@ -74,13 +74,13 @@ module.exports = {
 
     //Bull Neutral Market
     this.option('bln_mode', 'The trigger to use', String, 'stochrsi')
-    this.option('bln_stoch_kperiods', 'number of RSI periods', Number, 9)
+    this.option('bln_stoch_kperiods', 'number of RSI periods', Number, 14)
     this.option('bln_stoch_k', '%D line', Number, 5)
     this.option('bln_stoch_d', '%D line', Number, 3)
     this.option('bln_stoch_k_sell', 'K must be above this before selling', Number, 60)
     this.option('bln_stoch_k_buy', 'K must be below this before buying', Number, 40)
 
-    this.option('bln_stochrsi_kperiods', 'number of RSI periods', Number, 9)
+    this.option('bln_stochrsi_kperiods', 'number of RSI periods', Number, 14)
     this.option('bln_stochrsi_k', '%D line', Number, 5)
     this.option('bln_stochrsi_d', '%D line', Number, 3)
     this.option('bln_stochrsi_k_sell', 'K must be above this before selling', Number, 60)
@@ -93,13 +93,13 @@ module.exports = {
 
     //Bear Long Market.   
     this.option('brl_mode', 'The trigger to use', String, 'stoch')
-    this.option('brl_stoch_kperiods', 'number of RSI periods', Number, 9)
+    this.option('brl_stoch_kperiods', 'number of RSI periods', Number, 14)
     this.option('brl_stoch_k', '%D line', Number, 5)
     this.option('brl_stoch_d', '%D line', Number, 3)
     this.option('brl_stoch_k_sell', 'K must be above this before selling', Number, 60)
     this.option('brl_stoch_k_buy', 'K must be below this before buying', Number, 40)
 
-    this.option('brl_stochrsi_kperiods', 'number of RSI periods', Number, 9)
+    this.option('brl_stochrsi_kperiods', 'number of RSI periods', Number, 14)
     this.option('brl_stochrsi_k', '%D line', Number, 5)
     this.option('brl_stochrsi_d', '%D line', Number, 3)
     this.option('brl_stochrsi_k_sell', 'K must be above this before selling', Number, 60)
@@ -118,7 +118,7 @@ module.exports = {
     this.option('brs_stoch_k_sell', 'K must be above this before selling', Number, 60)
     this.option('brs_stoch_k_buy', 'K must be below this before buying', Number, 40)
 
-    this.option('brs_stochrsi_kperiods', 'number of RSI periods', Number, 9)
+    this.option('brs_stochrsi_kperiods', 'number of RSI periods', Number, 14)
     this.option('brs_stochrsi_k', '%D line', Number, 5)
     this.option('brs_stochrsi_d', '%D line', Number, 3)
     this.option('brs_stochrsi_k_sell', 'K must be above this before selling', Number, 60)
@@ -137,7 +137,7 @@ module.exports = {
     this.option('brn_stoch_k_sell', 'K must be above this before selling', Number, 60)
     this.option('brn_stoch_k_buy', 'K must be below this before buying', Number, 40)
 
-    this.option('brn_stochrsi_kperiods', 'number of RSI periods', Number, 9)
+    this.option('brn_stochrsi_kperiods', 'number of RSI periods', Number, 14)
     this.option('brn_stochrsi_k', '%D line', Number, 5)
     this.option('brn_stochrsi_d', '%D line', Number, 3)
     this.option('brn_stochrsi_k_sell', 'K must be above this before selling', Number, 60)
@@ -150,13 +150,13 @@ module.exports = {
 
     // Neutral Market 
     this.option('n_mode', 'The trigger to use', String, 'stochrsi')
-    this.option('n_stoch_kperiods', 'number of RSI periods', Number, 9)
+    this.option('n_stoch_kperiods', 'number of RSI periods', Number, 14)
     this.option('n_stoch_k', '%D line', Number, 5)
     this.option('n_stoch_d', '%D line', Number, 3)
     this.option('n_stoch_k_sell', 'K must be above this before selling', Number, 60)
     this.option('n_stoch_k_buy', 'K must be below this before buying', Number, 40)
 
-    this.option('n_stochrsi_kperiods', 'number of RSI periods', Number, 9)
+    this.option('n_stochrsi_kperiods', 'number of RSI periods', Number, 14)
     this.option('n_stochrsi_k', '%D line', Number, 5)
     this.option('n_stochrsi_d', '%D line', Number, 3)
     this.option('n_stochrsi_k_sell', 'K must be above this before selling', Number, 60)
@@ -658,19 +658,19 @@ module.exports = {
           macd_short_period:Phenotypes.Range(2, 50),
           macd_long_period:Phenotypes.Range(2, 50),
           macd_signal_period:Phenotypes.Range(2, 50),
-          macd_bull:Phenotypes.RangeFactor(0.0, 100.0, 0.01),
-          macd_bear:Phenotypes.RangeFactor(0.0, -100.0, 0.01),
+          macd_bull:Phenotypes.RangeFactor(0.0, 0.1, 0.01),
+          macd_bear:Phenotypes.RangeFactor(0.0, -0.1, 0.01),
 
       
-          macd_bull_short:Phenotypes.RangeFactor(0.0, -100.0, 0.01),
-          macd_bull_long:Phenotypes.RangeFactor(0.0, -100.0, 0.01),
+          macd_bull_short:Phenotypes.RangeFactor(0.0, -0.1, 0.01),
+          macd_bull_long:Phenotypes.RangeFactor(0.0, 0.1, 0.01),
       
-          macd_bear_short:Phenotypes.RangeFactor(0.0, -100.0, 0.01),
-          macd_bear_long:Phenotypes.RangeFactor(0.0, 100.0, 0.01),
+          macd_bear_short:Phenotypes.RangeFactor(0.0, -0.1, 0.01),
+          macd_bear_long:Phenotypes.RangeFactor(0.0, 0.1, 0.01),
       
 
           // BullLong
-          bll_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          bll_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none']),//,'sell','buy']),
           bll_stoch_kperiods:Phenotypes.Range(5, 30),
           bll_stoch_k:Phenotypes.Range(1, 10),
           bll_stoch_d:Phenotypes.Range(1, 10),
@@ -689,7 +689,7 @@ module.exports = {
           bll_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
       
           // BullShort
-          bls_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          bls_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
           bls_stoch_kperiods:Phenotypes.Range(5, 30),
           bls_stoch_k:Phenotypes.Range(1, 10),
           bls_stoch_d:Phenotypes.Range(1, 10),
@@ -708,7 +708,7 @@ module.exports = {
           bls_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           
           // BullNeutral
-          bln_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          bln_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
           bln_stoch_kperiods:Phenotypes.Range(5, 30),
           bln_stoch_k:Phenotypes.Range(1, 10),
           bln_stoch_d:Phenotypes.Range(1, 10),
@@ -727,7 +727,7 @@ module.exports = {
           bln_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           // BearLong
-          brl_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          brl_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
           brl_stoch_kperiods:Phenotypes.Range(5, 30),
           brl_stoch_k:Phenotypes.Range(1, 10),
           brl_stoch_d:Phenotypes.Range(1, 10),
@@ -746,7 +746,7 @@ module.exports = {
           brl_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           // BearShort
-          brs_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          brs_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
           brs_stoch_kperiods:Phenotypes.Range(5, 30),
           brs_stoch_k:Phenotypes.Range(1, 10),
           brs_stoch_d:Phenotypes.Range(1, 10),
@@ -765,7 +765,7 @@ module.exports = {
           brs_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           // BearNeutral
-          brn_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          brn_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
           brn_stoch_kperiods:Phenotypes.Range(5, 30),
           brn_stoch_k:Phenotypes.Range(1, 10),
           brn_stoch_d:Phenotypes.Range(1, 10),
@@ -785,7 +785,7 @@ module.exports = {
   
 
           // Neutral
-          n_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          n_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
           n_stoch_kperiods:Phenotypes.Range(5, 30),
           n_stoch_k:Phenotypes.Range(1, 10),
           n_stoch_d:Phenotypes.Range(1, 10),
