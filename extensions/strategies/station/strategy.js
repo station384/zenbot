@@ -19,14 +19,14 @@ module.exports = {
     this.option('macd_short_period', 'number of RSI periods',Number, 12)
     this.option('macd_long_period', 'number of RSI periods',Number, 26)
     this.option('macd_signal_period', 'number of RSI periods',Number, 9)
-    this.option('macd_bull', 'histogram needs to be greater than this value to be considured a bull market (0..-1)', Number, 0.001)
-    this.option('macd_bear', 'histogram needs to be less than this value to be considured a bear market (0..-1)', Number, -0.001)
+    this.option('macd_bull', 'histogram needs to be greater than this value to be considured a bull market (0..100)', Number, 0.1)
+    this.option('macd_bear', 'histogram needs to be less than this value to be considured a bear market (0..-100)', Number, -0.1)
 
-    this.option('macd_bull_short', 'signal needs to be this value less than macd to be considured for short trading in a bull market (0..-1)', Number, -0.001)
-    this.option('macd_bull_long', 'signal needs to be this value greater than macd to be considured for long trading in a bull market (0..-1)', Number, 0.001)
+    this.option('macd_bull_short', 'signal needs to be this value less than macd to be considured for short trading in a bull market (0..-100)', Number, -1.0)
+    this.option('macd_bull_long', 'signal needs to be this value greater than macd to be considured for long trading in a bull market (0..100)', Number, 1.0)
 
-    this.option('macd_bear_short', 'signal needs to be this value less than macd to be considured for short trading in a bear market (0..-1)', Number, 0.001)
-    this.option('macd_bear_long', 'signal needs to be this value greater than macd to be considured for long trading in a bear market (0..-1)', Number, -0.001)
+    this.option('macd_bear_short', 'signal needs to be this value less than macd to be considured for short trading in a bear market (0..-100)', Number, 1.0)
+    this.option('macd_bear_long', 'signal needs to be this value greater than macd to be considured for long trading in a bear market (0..100)', Number, -1.0)
 
 
     //Lots of options.  
@@ -54,7 +54,7 @@ module.exports = {
     this.option('bll_bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 50)
 
     //Bull Short Market
-    this.option('bls_mode', 'The trigger to use', String, 'stoch')
+    this.option('bls_mode', 'The trigger to use', String, 'stochrsi')
     this.option('bls_stoch_kperiods', 'number of RSI periods', Number, 14)
     this.option('bls_stoch_k', '%D line', Number, 5)
     this.option('bls_stoch_d', '%D line', Number, 3)
@@ -73,7 +73,7 @@ module.exports = {
     this.option('bls_bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 50)
 
     //Bull Neutral Market
-    this.option('bln_mode', 'The trigger to use', String, 'stoch')
+    this.option('bln_mode', 'The trigger to use', String, 'stochrsi')
     this.option('bln_stoch_kperiods', 'number of RSI periods', Number, 9)
     this.option('bln_stoch_k', '%D line', Number, 5)
     this.option('bln_stoch_d', '%D line', Number, 3)
@@ -110,8 +110,8 @@ module.exports = {
     this.option('brl_bollinger_upper_bound_pct', 'pct the current price should be near the bollinger upper bound before we sell', Number, 50)
     this.option('brl_bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 50)
 
-    //Bull Short Market
-    this.option('brs_mode', 'The trigger to use', String, 'stoch')
+    //Bear Short Market
+    this.option('brs_mode', 'The trigger to use', String, 'sell')
     this.option('brs_stoch_kperiods', 'number of RSI periods', Number, 14)
     this.option('brs_stoch_k', '%D line', Number, 5)
     this.option('brs_stoch_d', '%D line', Number, 3)
@@ -130,7 +130,7 @@ module.exports = {
     this.option('brs_bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 50)
 
     //Bull Neutral Market
-    this.option('brn_mode', 'The trigger to use', String, 'stoch')
+    this.option('brn_mode', 'The trigger to use', String, 'stochrsi')
     this.option('brn_stoch_kperiods', 'number of RSI periods', Number, 9)
     this.option('brn_stoch_k', '%D line', Number, 5)
     this.option('brn_stoch_d', '%D line', Number, 3)
@@ -149,7 +149,7 @@ module.exports = {
     this.option('brn_bollinger_lower_bound_pct', 'pct the current price should be near the bollinger lower bound before we buy', Number, 50)
 
     // Neutral Market 
-    this.option('n_mode', 'The trigger to use', String, 'stoch')
+    this.option('n_mode', 'The trigger to use', String, 'stochrsi')
     this.option('n_stoch_kperiods', 'number of RSI periods', Number, 9)
     this.option('n_stoch_k', '%D line', Number, 5)
     this.option('n_stoch_d', '%D line', Number, 3)
@@ -194,16 +194,16 @@ module.exports = {
         //macd fast
         //signal slow
         s.marketPosition = 'neutral'
-        let macdSignal = resMacd.macd_signal[resMacd.macd_signal.length-1]
-        let macd = resMacd.macd[resMacd.macd.length-1]
-        let macdHistogram = resMacd.macd_histogram[resMacd.macd_histogram.length-1]
+        let macdSignal = resMacd.macd_signal[resMacd.macd_signal.length-1] * 100
+        let macd = resMacd.macd[resMacd.macd.length-1] * 100 
+        let macdHistogram = resMacd.macd_histogram[resMacd.macd_histogram.length-1] * 100
         // macd is fast mover
         if(macdHistogram    > s.options.macd_bull ) {
           s.marketPosition = 'bull'
-          if(macd  - macdSignal  < s.options.macd_bull_short) {
+          if( macdSignal - macd   < s.options.macd_bull_short) {
             s.marketPosition = 'bullShort'   // price falling trend rising
           } else
-          if(macd - macdSignal    > s.options.macd_bull_long) {
+          if (macdSignal - macd     > s.options.macd_bull_long) {
             s.marketPosition = 'bullLong'    // price rising trend rising
           } else 
           {
@@ -213,10 +213,10 @@ module.exports = {
 
         if(macdHistogram < s.options.macd_bear) {
           s.marketPosition = 'bear' 
-          if(macd - macdSignal  < s.options.macd_bear_short ) {
+          if(macdSignal - macd   < s.options.macd_bear_short ) {
             s.marketPosition = 'bearShort'   // price falling trend falling
           } else
-          if(macd - macdSignal  > s.options.macd_bear_long ) {
+          if(macdSignal - macd  > s.options.macd_bear_long ) {
             s.marketPosition = 'bearLong'    // price rising trend falling
           } else 
           {
@@ -658,15 +658,15 @@ module.exports = {
           macd_short_period:Phenotypes.Range(2, 50),
           macd_long_period:Phenotypes.Range(2, 50),
           macd_signal_period:Phenotypes.Range(2, 50),
-          macd_bull:Phenotypes.RangeFactor(-0.00001, 0.0001, 0.00001),
-          macd_bear:Phenotypes.RangeFactor(0.00001, -0.0001, 0.00001),
+          macd_bull:Phenotypes.RangeFactor(0.0, 100.0, 0.01),
+          macd_bear:Phenotypes.RangeFactor(0.0, -100.0, 0.01),
 
       
-          macd_bull_short:Phenotypes.RangeFactor(0.0, -0.0001, 0.00001),
-          macd_bull_long:Phenotypes.RangeFactor(0.0, 0.0001, 0.00001),
+          macd_bull_short:Phenotypes.RangeFactor(0.0, -100.0, 0.01),
+          macd_bull_long:Phenotypes.RangeFactor(0.0, -100.0, 0.01),
       
-          macd_bear_short:Phenotypes.RangeFactor(0.0, -0.0001, 0.00001),
-          macd_bear_long:Phenotypes.RangeFactor(0.0, 0.0001, 0.00001),
+          macd_bear_short:Phenotypes.RangeFactor(0.0, -100.0, 0.01),
+          macd_bear_long:Phenotypes.RangeFactor(0.0, 100.0, 0.01),
       
 
           // BullLong
