@@ -25,8 +25,8 @@ module.exports = {
     this.option('macd_bull_short', 'signal needs to be this value less than macd to be considured for short trading in a bull market (0..-100)', Number, -1.0)
     this.option('macd_bull_long', 'signal needs to be this value greater than macd to be considured for long trading in a bull market (0..100)', Number, 1.0)
 
-    this.option('macd_bear_short', 'signal needs to be this value less than macd to be considured for short trading in a bear market (0..-100)', Number, 1.0)
-    this.option('macd_bear_long', 'signal needs to be this value greater than macd to be considured for long trading in a bear market (0..100)', Number, -1.0)
+    this.option('macd_bear_short', 'signal needs to be this value less than macd to be considured for short trading in a bear market (0..-100)', Number, -1.0)
+    this.option('macd_bear_long', 'signal needs to be this value greater than macd to be considured for long trading in a bear market (0..100)', Number, 1.0)
 
 
     //Lots of options.  
@@ -670,7 +670,7 @@ module.exports = {
       
 
           // BullLong
-          bll_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none']),//,'sell','buy']),
+          bll_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
           bll_stoch_kperiods:Phenotypes.Range(5, 30),
           bll_stoch_k:Phenotypes.Range(1, 10),
           bll_stoch_d:Phenotypes.Range(1, 10),
@@ -689,7 +689,7 @@ module.exports = {
           bll_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
       
           // BullShort
-          bls_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
+          bls_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
           bls_stoch_kperiods:Phenotypes.Range(5, 30),
           bls_stoch_k:Phenotypes.Range(1, 10),
           bls_stoch_d:Phenotypes.Range(1, 10),
@@ -708,7 +708,7 @@ module.exports = {
           bls_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           
           // BullNeutral
-          bln_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
+          bln_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
           bln_stoch_kperiods:Phenotypes.Range(5, 30),
           bln_stoch_k:Phenotypes.Range(1, 10),
           bln_stoch_d:Phenotypes.Range(1, 10),
@@ -727,7 +727,7 @@ module.exports = {
           bln_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           // BearLong
-          brl_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
+          brl_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
           brl_stoch_kperiods:Phenotypes.Range(5, 30),
           brl_stoch_k:Phenotypes.Range(1, 10),
           brl_stoch_d:Phenotypes.Range(1, 10),
@@ -746,7 +746,7 @@ module.exports = {
           brl_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           // BearShort
-          brs_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
+          brs_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
           brs_stoch_kperiods:Phenotypes.Range(5, 30),
           brs_stoch_k:Phenotypes.Range(1, 10),
           brs_stoch_d:Phenotypes.Range(1, 10),
@@ -765,7 +765,7 @@ module.exports = {
           brs_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           // BearNeutral
-          brn_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
+          brn_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
           brn_stoch_kperiods:Phenotypes.Range(5, 30),
           brn_stoch_k:Phenotypes.Range(1, 10),
           brn_stoch_d:Phenotypes.Range(1, 10),
@@ -785,7 +785,7 @@ module.exports = {
   
 
           // Neutral
-          n_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
+          n_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
           n_stoch_kperiods:Phenotypes.Range(5, 30),
           n_stoch_k:Phenotypes.Range(1, 10),
           n_stoch_d:Phenotypes.Range(1, 10),
