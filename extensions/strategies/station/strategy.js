@@ -198,7 +198,7 @@ module.exports = {
         let macd = resMacd.macd[resMacd.macd.length-1] * 100 
         let macdHistogram = resMacd.macd_histogram[resMacd.macd_histogram.length-1] * 100
         // macd is fast mover
-        if(macdHistogram    > s.options.macd_bull ) {
+        if(macdHistogram > s.options.macd_bull ) {
           s.marketPosition = 'bull'
           if( macdSignal - macd   < s.options.macd_bull_short) {
             s.marketPosition = 'bullShort'   // price falling trend rising
@@ -209,8 +209,7 @@ module.exports = {
           {
             s.marketPosition = 'bullNeutral'    // price rising trend rising
           }
-        }
-
+        } else
         if(macdHistogram < s.options.macd_bear) {
           s.marketPosition = 'bear' 
           if(macdSignal - macd   < s.options.macd_bear_short ) {
@@ -225,55 +224,36 @@ module.exports = {
         }
         s.period.report.macdhisto = macdHistogram
         s.signal = null
+        //console.log(s.marketPosition)
         if( s.marketPosition  == 'bullLong') 
         {
-          if(s.options.bll_mode == 'stoch')
-          {
-            actOnBollinger_Stoch(s,
-              s.options.bll_bollinger_size, 
-              s.options.bll_bollinger_time, 
-              s.options.bll_bollinger_upper_bound_pct, 
-              s.options.bll_bollinger_lower_bound_pct,
-              s.options.bll_stoch_kperiods, 
-              s.options.bll_stoch_k, 
-              s.options.bll_stoch_d, 
-              s.options.bll_stoch_k_sell, 
-              s.options.bll_stoch_k_buy, cb, tMarket)
-          } else
-          if(s.options.bll_mode == 'stochrsi')
-          {
-            actOnBollinger_StochRSI (s,
-              s.options.bll_bollinger_size, 
-              s.options.bll_bollinger_time, 
-              s.options.bll_bollinger_upper_bound_pct, 
-              s.options.bll_bollinger_lower_bound_pct, 
-              s.options.bll_stochrsi_kperiods, 
-              s.options.bll_stochrsi_k, 
-              s.options.bll_stochrsi_d, 
-              s.options.bll_stochrsi_k_sell, 
-              s.options.bll_stochrsi_k_buy, cb, tMarket)
-          } else
-          if(s.options.bll_mode == 'none')
-          {
-            s.signal = null
+          // why use switch you ask?  I was bored with if else.  and its faster,  not that it matters much here in a low call part of the code
+          switch (s.options.bll_mode){
+          case 'stoch': 
+            actOnBollinger_Stoch(s, s.options.bll_bollinger_size, s.options.bll_bollinger_time, s.options.bll_bollinger_upper_bound_pct, s.options.bll_bollinger_lower_bound_pct,s.options.bll_stoch_kperiods, s.options.bll_stoch_k, s.options.bll_stoch_d, s.options.bll_stoch_k_sell, s.options.bll_stoch_k_buy, cb, tMarket)
+            break
+          case 'stochrsi': 
+            actOnBollinger_StochRSI (s, s.options.bll_bollinger_size, s.options.bll_bollinger_time, s.options.bll_bollinger_upper_bound_pct, s.options.bll_bollinger_lower_bound_pct, s.options.bll_stochrsi_kperiods, s.options.bll_stochrsi_k, s.options.bll_stochrsi_d, s.options.bll_stochrsi_k_sell, s.options.bll_stochrsi_k_buy, cb, tMarket)
+            break
+          case 'none':
+            actOnNone(s,cb) 
+            break
+          case 'sell': 
+            actOnSell(s,cb)
+            break
+          case 'buy': 
+            actOnBuy(s,cb)
+            break
+          default:
             cb()
+            break 
           }
-          else
-          if(s.options.bll_mode == 'sell')
-          {
-            s.signal = 'sell'
-            cb()
-          }
-          if(s.options.bll_mode == 'buy')
-          {
-            s.signal = 'buy'
-            cb()
-          }
+
         } else
         if( s.marketPosition  == 'bullShort') 
         {
-          if(s.options.bls_mode == 'stoch')
-          {
+          switch (s.options.bls_mode){
+          case 'stoch': 
             actOnBollinger_Stoch(s,
               s.options.bls_bollinger_size, 
               s.options.bls_bollinger_time, 
@@ -286,9 +266,8 @@ module.exports = {
               s.options.bls_stoch_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.bls_mode == 'stochrsi')
-          {
+            break
+          case 'stochrsi': 
             actOnBollinger_StochRSI (s,
               s.options.bls_bollinger_size, 
               s.options.bls_bollinger_time, 
@@ -301,28 +280,25 @@ module.exports = {
               s.options.bls_stochrsi_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.bls_mode == 'none')
-          {
-            s.signal = null
+            break
+          case 'none': 
+            actOnNone(s,cb)
+            break
+          case 'sell': 
+            actOnSell(s,cb)
+            break
+          case 'buy': 
+            actOnBuy(s,cb)
+            break
+          default:
             cb()
-          }
-          else
-          if(s.options.bls_mode == 'sell')
-          {
-            s.signal = 'sell'
-            cb()
-          }
-          if(s.options.bls_mode == 'buy')
-          {
-            s.signal = 'buy'
-            cb()
+            break 
           }
         } else
         if( s.marketPosition  == 'bullNeutral') 
         {
-          if(s.options.bln_mode == 'stoch')
-          {
+          switch (s.options.bln_mode){
+          case 'stoch': 
             actOnBollinger_Stoch(s,
               s.options.bln_bollinger_size, 
               s.options.bln_bollinger_time, 
@@ -335,9 +311,8 @@ module.exports = {
               s.options.bln_stoch_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.bln_mode == 'stochrsi')
-          {
+            break
+          case 'stochrsi': 
             actOnBollinger_StochRSI (s,
               s.options.bln_bollinger_size, 
               s.options.bln_bollinger_time, 
@@ -350,28 +325,26 @@ module.exports = {
               s.options.bln_stochrsi_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.bln_mode == 'none')
-          {
-            s.signal = null
+            break
+          case 'none': 
+            actOnNone(s,cb)
+            break
+          case 'sell': 
+            actOnSell(s,cb)
+            break
+          case 'buy': 
+            actOnBuy(s,cb)
+            break
+          default:
             cb()
+            break 
           }
-          else
-          if(s.options.bln_mode == 'sell')
-          {
-            s.signal = 'sell'
-            cb()
-          }
-          if(s.options.bln_mode == 'buy')
-          {
-            s.signal = 'buy'
-            cb()
-          }        
+             
         } else
         if( s.marketPosition  == 'bearLong') 
         { 
-          if(s.options.brl_mode == 'stoch')
-          {
+          switch (s.options.brl_mode){
+          case 'stoch': 
             actOnBollinger_Stoch(s,
               s.options.brl_bollinger_size, 
               s.options.brl_bollinger_time, 
@@ -384,9 +357,8 @@ module.exports = {
               s.options.brl_stoch_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.brl_mode == 'stochrsi')
-          {
+            break
+          case 'stochrsi': 
             actOnBollinger_StochRSI (s,
               s.options.brl_bollinger_size, 
               s.options.brl_bollinger_time, 
@@ -399,28 +371,25 @@ module.exports = {
               s.options.brl_stochrsi_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.brl_mode == 'none')
-          {
-            s.signal = null
+            break
+          case 'none': 
+            actOnNone(s,cb)
+            break
+          case 'sell': 
+            actOnSell(s,cb)
+            break
+          case 'buy': 
+            actOnBuy(s,cb)
+            break
+          default:
             cb()
+            break 
           }
-          else
-          if(s.options.brl_mode == 'sell')
-          {
-            s.signal = 'sell'
-            cb()
-          }
-          if(s.options.brl_mode == 'buy')
-          {
-            s.signal = 'buy'
-            cb()
-          }     
         } else 
         if( s.marketPosition  == 'bearShort') 
         {
-          if(s.options.brs_mode == 'stoch')
-          {
+          switch (s.options.brs_mode){
+          case 'stoch': 
             actOnBollinger_Stoch(s,
               s.options.brs_bollinger_size, 
               s.options.brs_bollinger_time, 
@@ -433,9 +402,8 @@ module.exports = {
               s.options.brs_stoch_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.brs_mode == 'stochrsi')
-          {
+            break
+          case 'stochrsi': 
             actOnBollinger_StochRSI (s,
               s.options.brs_bollinger_size, 
               s.options.brs_bollinger_time, 
@@ -448,28 +416,25 @@ module.exports = {
               s.options.brs_stochrsi_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.brs_mode == 'none')
-          {
-            s.signal = null
+            break
+          case 'none': 
+            actOnNone(s,cb)
+            break
+          case 'sell': 
+            actOnSell(s,cb)
+            break
+          case 'buy': 
+            actOnBuy(s,cb)
+            break
+          default:
             cb()
+            break 
           }
-          else
-          if(s.options.brs_mode == 'sell')
-          {
-            s.signal = 'sell'
-            cb()
-          }
-          if(s.options.brs_mode == 'buy')
-          {
-            s.signal = 'buy'
-            cb()
-          }   
         } else 
         if( s.marketPosition  == 'bearNeutral') 
         {
-          if(s.options.brn_mode == 'stoch')
-          {
+          switch (s.options.brn_mode){
+          case 'stoch': 
             actOnBollinger_Stoch(s,
               s.options.brn_bollinger_size, 
               s.options.brn_bollinger_time, 
@@ -482,9 +447,8 @@ module.exports = {
               s.options.brn_stoch_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.brn_mode == 'stochrsi')
-          {
+            break
+          case 'stochrsi': 
             actOnBollinger_StochRSI (s,
               s.options.brn_bollinger_size, 
               s.options.brn_bollinger_time, 
@@ -497,29 +461,25 @@ module.exports = {
               s.options.brn_stochrsi_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.brn_mode == 'none')
-          {
-            s.signal = null
+            break
+          case 'none': 
+            actOnNone(s,cb)
+            break
+          case 'sell': 
+            actOnSell(s,cb)
+            break
+          case 'buy': 
+            actOnBuy(s,cb)
+            break
+          default:
             cb()
+            break 
           }
-          else
-          if(s.options.brn_mode == 'sell')
-          {
-            s.signal = 'sell'
-            cb()
-          }
-          if(s.options.brn_mode == 'buy')
-          {
-            s.signal = 'buy'
-            cb()
-          }          
-        }
-        else
+        }  else
         if( s.marketPosition  == 'neutral') 
         {
-          if(s.options.n_mode == 'stoch')
-          {
+          switch (s.options.n_mode){
+          case 'stoch': 
             actOnBollinger_Stoch(s,
               s.options.n_bollinger_size, 
               s.options.n_bollinger_time, 
@@ -532,9 +492,8 @@ module.exports = {
               s.options.n_stoch_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.n_mode == 'stochrsi')
-          {
+            break
+          case 'stochrsi': 
             actOnBollinger_StochRSI (s,
               s.options.n_bollinger_size, 
               s.options.n_bollinger_time, 
@@ -547,29 +506,31 @@ module.exports = {
               s.options.n_stochrsi_k_buy, 
               cb, 
               tMarket)
-          } else
-          if(s.options.n_mode == 'none')
-          {
-            s.signal = null
+            break
+          case 'none': 
+            actOnNone(s,cb)
+            break
+          case 'sell': 
+            actOnSell(s,cb)
+            break
+          case 'buy': 
+            actOnBuy(s,cb)
+            break
+          default:
             cb()
+            break 
           }
-          else
-          if(s.options.n_mode == 'sell')
-          {
-            s.signal = 'sell'
-            cb()
-          }
-          if(s.options.n_mode == 'buy')
-          {
-            s.signal = 'buy'
-            cb()
-          }          
         }
         else
         {
-          cb()
+          return cb()
         }
-      }).catch(function(){cb()})
+        return 
+      }).catch(function(err){
+        console.log(err)
+        s.signal=null
+        return cb()
+      })
   },
  
   onReport: function (s) {
@@ -646,8 +607,8 @@ module.exports = {
           markdown_buy_pct: Phenotypes.RangeFactor(-1.0, 1.0, 0.1),
           markup_sell_pct: Phenotypes.RangeFactor(-1.0, 1.0, 0.1),
           order_type: Phenotypes.ListOption(['maker', 'taker']),
-          sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
-          buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0,0.1),
+          sell_stop_pct: Phenotypes.RangeFactor(0.0, 50.0, 1.0),
+          buy_stop_pct: Phenotypes.RangeFactor(0.0, 50.0, 1.0),
           profit_stop_enable_pct: Phenotypes.RangeFactor(0.0, 5.0, 0.1),
           profit_stop_pct: Phenotypes.RangeFactor(0.0, 50.0, 0.1),
           rsi_periods: Phenotypes.Range(10, 30),
@@ -670,16 +631,16 @@ module.exports = {
       
 
           // BullLong
-          bll_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          bll_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
           bll_stoch_kperiods:Phenotypes.Range(5, 30),
-          bll_stoch_k:Phenotypes.Range(1, 10),
-          bll_stoch_d:Phenotypes.Range(1, 10),
+          bll_stoch_k:Phenotypes.Range(1, 35),
+          bll_stoch_d:Phenotypes.Range(1, 35),
           bll_stoch_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           bll_stoch_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
       
           bll_stochrsi_kperiods:Phenotypes.Range(5, 30),
-          bll_stochrsi_k:Phenotypes.Range(1, 10),
-          bll_stochrsi_d:Phenotypes.Range(1, 10),
+          bll_stochrsi_k:Phenotypes.Range(1, 35),
+          bll_stochrsi_d:Phenotypes.Range(1, 35),
           bll_stochrsi_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           bll_stochrsi_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
       
@@ -691,14 +652,14 @@ module.exports = {
           // BullShort
           bls_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
           bls_stoch_kperiods:Phenotypes.Range(5, 30),
-          bls_stoch_k:Phenotypes.Range(1, 10),
-          bls_stoch_d:Phenotypes.Range(1, 10),
+          bls_stoch_k:Phenotypes.Range(1, 35),
+          bls_stoch_d:Phenotypes.Range(1, 35),
           bls_stoch_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           bls_stoch_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
       
           bls_stochrsi_kperiods:Phenotypes.Range(5, 30),
-          bls_stochrsi_k:Phenotypes.Range(1, 10),
-          bls_stochrsi_d:Phenotypes.Range(1, 10),
+          bls_stochrsi_k:Phenotypes.Range(1, 35),
+          bls_stochrsi_d:Phenotypes.Range(1, 35),
           bls_stochrsi_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           bls_stochrsi_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
       
@@ -708,16 +669,16 @@ module.exports = {
           bls_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           
           // BullNeutral
-          bln_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          bln_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none']),//,'sell','buy']),
           bln_stoch_kperiods:Phenotypes.Range(5, 30),
-          bln_stoch_k:Phenotypes.Range(1, 10),
-          bln_stoch_d:Phenotypes.Range(1, 10),
+          bln_stoch_k:Phenotypes.Range(1, 35),
+          bln_stoch_d:Phenotypes.Range(1, 35),
           bln_stoch_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           bln_stoch_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
       
           bln_stochrsi_kperiods:Phenotypes.Range(5, 30),
-          bln_stochrsi_k:Phenotypes.Range(1, 10),
-          bln_stochrsi_d:Phenotypes.Range(1, 10),
+          bln_stochrsi_k:Phenotypes.Range(1, 35),
+          bln_stochrsi_d:Phenotypes.Range(1, 35),
           bln_stochrsi_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           bln_stochrsi_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
       
@@ -727,16 +688,16 @@ module.exports = {
           bln_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           // BearLong
-          brl_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          brl_mode:Phenotypes.ListOption(['stoch', 'stochrsi']),//,'none','sell','buy']),
           brl_stoch_kperiods:Phenotypes.Range(5, 30),
-          brl_stoch_k:Phenotypes.Range(1, 10),
-          brl_stoch_d:Phenotypes.Range(1, 10),
+          brl_stoch_k:Phenotypes.Range(1, 35),
+          brl_stoch_d:Phenotypes.Range(1, 35),
           brl_stoch_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           brl_stoch_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
       
           brl_stochrsi_kperiods:Phenotypes.Range(5, 30),
-          brl_stochrsi_k:Phenotypes.Range(1, 10),
-          brl_stochrsi_d:Phenotypes.Range(1, 10),
+          brl_stochrsi_k:Phenotypes.Range(1, 35),
+          brl_stochrsi_d:Phenotypes.Range(1, 35),
           brl_stochrsi_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           brl_stochrsi_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
       
@@ -748,14 +709,14 @@ module.exports = {
           // BearShort
           brs_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
           brs_stoch_kperiods:Phenotypes.Range(5, 30),
-          brs_stoch_k:Phenotypes.Range(1, 10),
-          brs_stoch_d:Phenotypes.Range(1, 10),
+          brs_stoch_k:Phenotypes.Range(1, 35),
+          brs_stoch_d:Phenotypes.Range(1, 35),
           brs_stoch_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           brs_stoch_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           brs_stochrsi_kperiods:Phenotypes.Range(5, 30),
-          brs_stochrsi_k:Phenotypes.Range(1, 10),
-          brs_stochrsi_d:Phenotypes.Range(1, 10),
+          brs_stochrsi_k:Phenotypes.Range(1, 35),
+          brs_stochrsi_d:Phenotypes.Range(1, 35),
           brs_stochrsi_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           brs_stochrsi_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
@@ -765,16 +726,16 @@ module.exports = {
           brs_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           // BearNeutral
-          brn_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          brn_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none']),//,'sell','buy']),
           brn_stoch_kperiods:Phenotypes.Range(5, 30),
-          brn_stoch_k:Phenotypes.Range(1, 10),
-          brn_stoch_d:Phenotypes.Range(1, 10),
+          brn_stoch_k:Phenotypes.Range(1, 35),
+          brn_stoch_d:Phenotypes.Range(1, 35),
           brn_stoch_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           brn_stoch_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           brn_stochrsi_kperiods:Phenotypes.Range(5, 30),
-          brn_stochrsi_k:Phenotypes.Range(1, 10),
-          brn_stochrsi_d:Phenotypes.Range(1, 10),
+          brn_stochrsi_k:Phenotypes.Range(1, 35),
+          brn_stochrsi_d:Phenotypes.Range(1, 35),
           brn_stochrsi_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           brn_stochrsi_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
@@ -785,16 +746,16 @@ module.exports = {
   
 
           // Neutral
-          n_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none','sell','buy']),
+          n_mode:Phenotypes.ListOption(['stoch', 'stochrsi','none']),//,'sell','buy']),
           n_stoch_kperiods:Phenotypes.Range(5, 30),
-          n_stoch_k:Phenotypes.Range(1, 10),
-          n_stoch_d:Phenotypes.Range(1, 10),
+          n_stoch_k:Phenotypes.Range(1, 35),
+          n_stoch_d:Phenotypes.Range(1, 35),
           n_stoch_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           n_stoch_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
           n_stochrsi_kperiods:Phenotypes.Range(5, 30),
-          n_stochrsi_k:Phenotypes.Range(1, 10),
-          n_stochrsi_d:Phenotypes.Range(1, 10),
+          n_stochrsi_k:Phenotypes.Range(1, 35),
+          n_stochrsi_d:Phenotypes.Range(1, 35),
           n_stochrsi_k_sell:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           n_stochrsi_k_buy:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
 
@@ -803,6 +764,24 @@ module.exports = {
           n_bollinger_upper_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0),
           n_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0)
         }
+}
+
+function actOnNone(s,cb)
+{
+  s.signal = null
+  cb()
+}
+
+function actOnBuy(s,cb)
+{
+  s.signal = 'buy'
+  cb()
+}
+
+function actOnSell(s,cb)
+{
+  s.signal = 'sell'
+  cb()
 }
 
 function actOnBollinger_Stoch (s, bollinger_size, bollinger_time, bollinger_upper_bound_pct, bollinger_lower_bound_pct, stoch_kperiods, stoch_k, stoch_d, stoch_k_sell, stoch_k_buy, cb, lMarket)  {
@@ -855,11 +834,13 @@ function actOnBollinger_Stoch (s, bollinger_size, bollinger_time, bollinger_uppe
           }
 
           cb()
-        }).catch(function(){ 
+        }).catch(function(err){ 
+          console.log(err)
           cb()
         })
     })
-    .catch(function(){ 
+    .catch(function(err){
+      console.log(err) 
       cb()
     })
 }
@@ -916,11 +897,13 @@ function actOnBollinger_StochRSI (s, bollinger_size, bollinger_time, bollinger_u
           }
 
           cb()
-        }).catch(function(){ 
+        }).catch(function(err){ 
+          console.log(err)
           cb()
         })
     })
-    .catch(function(){ 
+    .catch(function(err){ 
+      console.log(err)
       cb()
     })
 }

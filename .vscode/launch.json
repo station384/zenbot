@@ -36,6 +36,7 @@
                 "--order_type=maker", 
                 "--currency_capital=44",
                 "--keep_lookback_periods=100",
+                "--days=1"
        ]
         },   
         {
@@ -46,8 +47,7 @@
             "program": "${workspaceFolder}/zenbot.js",
             "cwd": "${workspaceFolder}",
             "args": [ "sim", "binance.bnb-usdt",  
-                "--period_length=4m", "--min_periods=125", "--markdown_buy_pct=0.7", "--markup_sell_pct=0.7", "--order_type=taker", "--sell_stop_pct=13.5", "--buy_stop_pct=46.9", "--profit_stop_enable_pct=2.5", "--profit_stop_pct=38.1", "--rsi_periods=28", "--macd_short_period=48", "--macd_long_period=12", "--macd_signal_period=48", "--macd_bull=9.10", "--macd_bear=-2.84", "--macd_bull_short=-76.11", "--macd_bull_long=-2.42", "--macd_bear_short=-15.69", "--macd_bear_long=83.06", "--bll_mode=buy", "--bll_stoch_kperiods=6", "--bll_stoch_k=2", "--bll_stoch_d=8", "--bll_stoch_k_sell=95", "--bll_stoch_k_buy=98", "--bll_stochrsi_kperiods=20", "--bll_stochrsi_k=4", "--bll_stochrsi_d=1", "--bll_stochrsi_k_sell=49", "--bll_stochrsi_k_buy=64", "--bll_bollinger_size=16", "--bll_bollinger_time=1.9", "--bll_bollinger_upper_bound_pct=14", "--bll_bollinger_lower_bound_pct=58", "--bls_mode=none", "--bls_stoch_kperiods=13", "--bls_stoch_k=3", "--bls_stoch_d=9", "--bls_stoch_k_sell=19", "--bls_stoch_k_buy=89", "--bls_stochrsi_kperiods=7", "--bls_stochrsi_k=5", "--bls_stochrsi_d=9", "--bls_stochrsi_k_sell=13", "--bls_stochrsi_k_buy=97", "--bls_bollinger_size=16", "--bls_bollinger_time=2.9", "--bls_bollinger_upper_bound_pct=78", "--bls_bollinger_lower_bound_pct=73", "--bln_mode=stochrsi", "--bln_stoch_kperiods=10", "--bln_stoch_k=7", "--bln_stoch_d=6", "--bln_stoch_k_sell=96", "--bln_stoch_k_buy=27", "--bln_stochrsi_kperiods=25", "--bln_stochrsi_k=3", "--bln_stochrsi_d=4", "--bln_stochrsi_k_sell=24", "--bln_stochrsi_k_buy=9", "--bln_bollinger_size=17", "--bln_bollinger_time=2.5", "--bln_bollinger_upper_bound_pct=18", "--bln_bollinger_lower_bound_pct=69", "--brl_mode=buy", "--brl_stoch_kperiods=23", "--brl_stoch_k=9", "--brl_stoch_d=4", "--brl_stoch_k_sell=40", "--brl_stoch_k_buy=25", "--brl_stochrsi_kperiods=19", "--brl_stochrsi_k=3", "--brl_stochrsi_d=10", "--brl_stochrsi_k_sell=61", "--brl_stochrsi_k_buy=71", "--brl_bollinger_size=20", "--brl_bollinger_time=1.5", "--brl_bollinger_upper_bound_pct=53", "--brl_bollinger_lower_bound_pct=36", "--brs_mode=buy", "--brs_stoch_kperiods=5", "--brs_stoch_k=10", "--brs_stoch_d=7", "--brs_stoch_k_sell=75", "--brs_stoch_k_buy=76", "--brs_stochrsi_kperiods=6", "--brs_stochrsi_k=5", "--brs_stochrsi_d=8", "--brs_stochrsi_k_sell=27", "--brs_stochrsi_k_buy=7", "--brs_bollinger_size=25", "--brs_bollinger_time=1.2", "--brs_bollinger_upper_bound_pct=92", "--brs_bollinger_lower_bound_pct=9", "--brn_mode=sell", "--brn_stoch_kperiods=23", "--brn_stoch_k=8", "--brn_stoch_d=6", "--brn_stoch_k_sell=13", "--brn_stoch_k_buy=44", "--brn_stochrsi_kperiods=6", "--brn_stochrsi_k=6", "--brn_stochrsi_d=5", "--brn_stochrsi_k_sell=86", "--brn_stochrsi_k_buy=17", "--brn_bollinger_size=15", "--brn_bollinger_time=1.2", "--brn_bollinger_upper_bound_pct=16", "--brn_bollinger_lower_bound_pct=34", "--n_mode=stochrsi", "--n_stoch_kperiods=28", "--n_stoch_k=8", "--n_stoch_d=2", "--n_stoch_k_sell=20", "--n_stoch_k_buy=91", "--n_stochrsi_kperiods=19", "--n_stochrsi_k=8", "--n_stochrsi_d=1", "--n_stochrsi_k_sell=77", "--n_stochrsi_k_buy=37", "--n_bollinger_size=22", "--n_bollinger_time=2.7", "--n_bollinger_upper_bound_pct=49", "--n_bollinger_lower_bound_pct=31", "--backtester_generation=12", "--minTrades=4", "--strategy=station", "--keep_lookback_periods=200", "--asset_capital=0", "--currency_capital=45", "--days=15", "--maxCores=7", "--generateLaunch", "--ignoreLaunchFitness", "--filename=none"
-
+                "--period_length=4m", "--min_periods=66", "--markdown_buy_pct=0.8", "--markup_sell_pct=0.4", "--order_type=taker", "--sell_stop_pct=0", "--buy_stop_pct=42", "--profit_stop_enable_pct=1.4", "--profit_stop_pct=26.4", "--rsi_periods=18", "--macd_short_period=17", "--macd_long_period=28", "--macd_signal_period=23", "--macd_bull=0.07", "--macd_bear=-0.04", "--macd_bull_short=-0.04", "--macd_bull_long=0.00", "--macd_bear_short=-0.03", "--macd_bear_long=0.07", "--bll_mode=stoch", "--bll_stoch_kperiods=21", "--bll_stoch_k=23", "--bll_stoch_d=21", "--bll_stoch_k_sell=68", "--bll_stoch_k_buy=83", "--bll_stochrsi_kperiods=14", "--bll_stochrsi_k=34", "--bll_stochrsi_d=29", "--bll_stochrsi_k_sell=43", "--bll_stochrsi_k_buy=98", "--bll_bollinger_size=14", "--bll_bollinger_time=1.0", "--bll_bollinger_upper_bound_pct=33", "--bll_bollinger_lower_bound_pct=93", "--bls_mode=sell", "--bls_stoch_kperiods=8", "--bls_stoch_k=5", "--bls_stoch_d=31", "--bls_stoch_k_sell=12", "--bls_stoch_k_buy=71", "--bls_stochrsi_kperiods=8", "--bls_stochrsi_k=24", "--bls_stochrsi_d=21", "--bls_stochrsi_k_sell=5", "--bls_stochrsi_k_buy=34", "--bls_bollinger_size=14", "--bls_bollinger_time=1.0", "--bls_bollinger_upper_bound_pct=18", "--bls_bollinger_lower_bound_pct=93", "--bln_mode=stochrsi", "--bln_stoch_kperiods=11", "--bln_stoch_k=2", "--bln_stoch_d=7", "--bln_stoch_k_sell=50", "--bln_stoch_k_buy=2", "--bln_stochrsi_kperiods=18", "--bln_stochrsi_k=8", "--bln_stochrsi_d=11", "--bln_stochrsi_k_sell=11", "--bln_stochrsi_k_buy=24", "--bln_bollinger_size=12", "--bln_bollinger_time=3.0", "--bln_bollinger_upper_bound_pct=58", "--bln_bollinger_lower_bound_pct=65", "--brl_mode=stochrsi", "--brl_stoch_kperiods=29", "--brl_stoch_k=3", "--brl_stoch_d=18", "--brl_stoch_k_sell=60", "--brl_stoch_k_buy=72", "--brl_stochrsi_kperiods=16", "--brl_stochrsi_k=25", "--brl_stochrsi_d=10", "--brl_stochrsi_k_sell=25", "--brl_stochrsi_k_buy=86", "--brl_bollinger_size=17", "--brl_bollinger_time=2.2", "--brl_bollinger_upper_bound_pct=88", "--brl_bollinger_lower_bound_pct=33", "--brs_mode=stoch", "--brs_stoch_kperiods=30", "--brs_stoch_k=30", "--brs_stoch_d=3", "--brs_stoch_k_sell=76", "--brs_stoch_k_buy=18", "--brs_stochrsi_kperiods=16", "--brs_stochrsi_k=28", "--brs_stochrsi_d=6", "--brs_stochrsi_k_sell=6", "--brs_stochrsi_k_buy=15", "--brs_bollinger_size=17", "--brs_bollinger_time=1.6", "--brs_bollinger_upper_bound_pct=96", "--brs_bollinger_lower_bound_pct=19", "--brn_mode=stochrsi", "--brn_stoch_kperiods=25", "--brn_stoch_k=2", "--brn_stoch_d=8", "--brn_stoch_k_sell=68", "--brn_stoch_k_buy=95", "--brn_stochrsi_kperiods=8", "--brn_stochrsi_k=4", "--brn_stochrsi_d=3", "--brn_stochrsi_k_sell=53", "--brn_stochrsi_k_buy=2", "--brn_bollinger_size=20", "--brn_bollinger_time=1.7", "--brn_bollinger_upper_bound_pct=5", "--brn_bollinger_lower_bound_pct=77", "--n_mode=stoch", "--n_stoch_kperiods=14", "--n_stoch_k=15", "--n_stoch_d=32", "--n_stoch_k_sell=35", "--n_stoch_k_buy=59", "--n_stochrsi_kperiods=8", "--n_stochrsi_k=18", "--n_stochrsi_d=2", "--n_stochrsi_k_sell=46", "--n_stochrsi_k_buy=31", "--n_bollinger_size=24", "--n_bollinger_time=3.0", "--n_bollinger_upper_bound_pct=100", "--n_bollinger_lower_bound_pct=61", "--backtester_generation=6", "--minTrades=50", "--fitnessCalcType=profit", "--strategy=station", "--keep_lookback_periods=200", "--asset_capital=0", "--currency_capital=45", "--days=15", "--maxCores=6", "--generateLaunch", "--ignoreLaunchFitness"
        ]
         },
         
@@ -144,26 +144,22 @@
                 "--selector=binance.bnb-usdt",
                 "--asset_capital=0.0",
                 "--currency_capital=100.0",
-                "--use_strategies=srsi_bollinger",
+                "--fitnessCalcType=profit",
+                "--use_strategies=station",
                 //trend_bollinger,trend_ema,
                 "--population=3",
                 "--population_data=",
                 "--days=2",
                 "--order_type=maker",
-                "--markup_sell_pct=0.9",
-                "--markdown_buy_pct=0.9",
-                "--sell_stop_pct=3",
-                "--buy_stop_pct=8",
-                "--period_length=10m",
+    
+            
 
 
                   "--maxCores=7",  
                   "--generateLaunch", 
                   "--noStatSave", 
                   "--ignoreLaunchFitness", 
-                  "--overbought_rsi=70", 
-                  "--oversold_rsi=30",  
-                  "--min_periods=25", 
+                 
                   "--minTrades=2"
 
                 ]
