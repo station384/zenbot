@@ -21,6 +21,7 @@
  * --silent=<true>|<false>                true:can improve performance
  * --runGenerations=<int>                 if used run this number of generations, will be shown 1 less due to generations starts at 0
  * --minTrades=<int>                      Minimum wins before generation is considured fit to evolve
+ * --fitnessCalcType=<wl / profit / classic / profitwl> Default: Classic. wl will score the highes for wins and losses, profit doesn't care about wins and losses only the higest end balance, classic uses original claculation / profitwl tries to get the highest profit using the lowest win/loss ratio
  *
  *
  * any parameters for sim and or strategy can be passed in and will override the genetic test generated parameter
@@ -61,6 +62,7 @@ let noStatSave = false
 //let floatScanWindow = false
 let ignoreLaunchFitness = false
 let minimumTrades = 0
+let fitnessCalcType = 'classic'
 
 let readSimDataFile = (iteration) => {
   let jsonFileName = `simulations/${population_data}/gen_${generationCount}/sim_${iteration}.json`
@@ -261,6 +263,7 @@ function simulateGeneration(generateLaunchFile) {
 
       iterationCount++
       phenotype.minTrades = minimumTrades
+      phenotype.fitnessCalcType = fitnessCalcType
       Backtester.runCommand(v, phenotype, command, cb)
     }
   })).reduce((a, b) => a.concat(b))
@@ -388,6 +391,17 @@ if (simArgs.maxCores) {
   if (simArgs.maxCores < 1) PARALLEL_LIMIT = 1
   else PARALLEL_LIMIT = simArgs.maxCores
 }
+fitnessCalcType = 'classic'
+if (simArgs.fitnessCalcType) {
+
+  if (simArgs.fitnessCalcType == 'classic') fitnessCalcType = 'classic'
+  if (simArgs.fitnessCalcType == 'wl') fitnessCalcType = 'wl'
+  if (simArgs.fitnessCalcType == 'profit') fitnessCalcType = 'profit'
+  if (simArgs.fitnessCalcType == 'profitwl') fitnessCalcType = 'profitwl'
+
+
+}
+
 
 if (!isUndefined(simArgs.runGenerations)) {
   if (simArgs.runGenerations) {
