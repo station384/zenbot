@@ -109,9 +109,9 @@ module.exports = function sim (conf, s) {
           filled_size: 0,
           ordertype: opts.order_type,
           tradetype: 'buy',
-          orig_time: now,
-          time: now,
-          created_at: now
+          orig_time: new Date().getTime(),//now,
+          time: new Date().getTime(),//now,
+          created_at: new Date().getTime()//now
         }
 
         orders['~' + result.id] = order
@@ -144,9 +144,9 @@ module.exports = function sim (conf, s) {
           filled_size: 0,
           ordertype: opts.order_type,
           tradetype: 'sell',
-          orig_time: now,
-          time: now,
-          created_at: now
+          orig_time: new Date().getTime(),//now,
+          time: new Date().getTime(),//now,
+          created_at: new Date().getTime()//now
         }
         orders['~' + result.id] = order
         openOrders['~' + result.id] = order
