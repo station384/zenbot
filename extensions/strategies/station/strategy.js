@@ -782,6 +782,14 @@ module.exports = {
           n_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0)
         }
 }
+function checkForPriorSell (s)
+{
+  return !s.api_order || (s.api_order && s.api_order.tradetype != 'sell' && s.api_order.status != 'open') || (s.api_order && s.api_order.tradetype == 'sell' && s.api_order.status == 'done')
+}
+function checkForPriorBuy (s)
+{
+  return !s.api_order || (s.api_order && s.api_order.tradetype != 'buy' && s.api_order.status != 'open') || (s.api_order && s.api_order.tradetype == 'buy' && s.api_order.status == 'done')
+}
 
 function actOnNone(s,cb)
 {
@@ -791,7 +799,7 @@ function actOnNone(s,cb)
 
 function actOnBuy(s,cb)
 {
-  if (s.action == null && (s['sell_order'] || !s['sell_order'] || !s['buy_order']))
+  if (checkForPriorBuy(s))
     s.signal = 'buy'
   else
     s.signal == null
@@ -800,12 +808,14 @@ function actOnBuy(s,cb)
 
 function actOnSell(s,cb)
 {
-  if (s.action == null && (s['buy_order'] || !s['sell_order'] || !s['buy_order']))
+  if (checkForPriorSell(s))
     s.signal = 'sell'
   else
     s.signal == null
   cb()
 }
+
+
 
 function actOnBollinger_Stoch (s, bollinger_size, bollinger_time, bollinger_upper_bound_pct, bollinger_lower_bound_pct, stoch_kperiods, stoch_k, stoch_d, stoch_k_sell, stoch_k_buy, cb, lMarket)  {
   ti_bollinger(s,'ti_bollinger', bollinger_size, bollinger_time, lMarket).
@@ -846,7 +856,7 @@ function actOnBollinger_Stoch (s, bollinger_size, bollinger_time, bollinger_uppe
           {
             if (s.period.close >= MiddleBand && s.period.close >= ((UpperBand / 100) * (100 +  bollinger_upper_bound_pct)) && nextdivergent < divergent && _switch == -1 && stoch_K > stoch_k_sell) 
             {
-              if (!s.api_order || (s.api_order && s.api_order.tradetype != 'sell' && s.api_order.status != 'open'))
+              if (checkForPriorSell(s))
                 s.signal = 'sell'
               else
                 s.signal == null
@@ -854,7 +864,7 @@ function actOnBollinger_Stoch (s, bollinger_size, bollinger_time, bollinger_uppe
             else
             if ( s.period.close < (LowerBand / 100) * (100 + bollinger_lower_bound_pct)   &&  nextdivergent >= divergent  && _switch == 1    && stoch_K < stoch_k_buy) 
             {
-              if (!s.api_order || (s.api_order && s.api_order.tradetype != 'buy' && s.api_order.status != 'open'))
+              if (checkForPriorBuy(s))
                 s.signal = 'buy'
               else
                 s.signal == null
@@ -915,7 +925,7 @@ function actOnBollinger_StochRSI (s, bollinger_size, bollinger_time, bollinger_u
           {
             if (s.action == null && s.period.close >= MiddleBand && s.period.close >= ((UpperBand / 100) * (100 +  bollinger_upper_bound_pct)) && nextdivergent < divergent && _switch == -1 && stoch_K > stochrsi_k_sell) 
             {
-              if (s.action == null && (s['buy_order'] || !s['sell_order'] || !s['buy_order']))
+              if (checkForPriorSell(s))
                 s.signal = 'sell'
               else
                 s.signal == null
@@ -923,7 +933,7 @@ function actOnBollinger_StochRSI (s, bollinger_size, bollinger_time, bollinger_u
             else
             if (s.action == null && s.period.close < (LowerBand / 100) * (100 + bollinger_lower_bound_pct)   &&  nextdivergent >= divergent  && _switch == 1    && stoch_K < stochrsi_k_buy) 
             {
-              if (s.action == null && (s['sell_order'] || !s['sell_order'] || !s['buy_order']))
+              if (checkForPriorBuy(s))
                 s.signal = 'buy'
               else
                 s.signal == null
