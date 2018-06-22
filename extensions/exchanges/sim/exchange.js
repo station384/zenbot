@@ -9,7 +9,7 @@ module.exports = function sim (conf, s) {
   let exchange_id = so.selector.exchange_id
   let real_exchange = require(path.resolve(__dirname, `../${exchange_id}/exchange`))(conf)
 
-  var now
+  //var now
   var balance = { asset: so.asset_capital, currency: so.currency_capital, asset_hold: 0, currency_hold: 0 }
 
   var last_order_id = 1001
@@ -171,7 +171,7 @@ module.exports = function sim (conf, s) {
     getCursor: real_exchange.getCursor,
 
     getTime: function() {
-      return now
+      return new Date().getTime()
     },
 
     processTrade: function(trade) {
