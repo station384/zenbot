@@ -42,7 +42,7 @@ let Backtester = require('../../lib/backtester')
 let argv = require('yargs').argv
 let z = require('zero-fill')
 let n = require('numbro')
-//let _ = require('lodash')
+
 
 let VERSION = 'Zenbot 4 Genetic Backtester v0.2.3'
 
