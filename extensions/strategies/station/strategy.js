@@ -5,6 +5,8 @@ let z = require('zero-fill')
   , ti_stochrsi = require('../../../lib/ti_stochrsi')
   , ti_bollinger = require('../../../lib/ti_bollinger')
   , Phenotypes = require('../../../lib/phenotype')
+  , dupOrderWorkAround = require('../../../lib/duporderworkaround')
+   
 module.exports = {
   name: 'Station-1',
   description: 'Station Adaptive Strategy - 1',
@@ -782,14 +784,6 @@ module.exports = {
           n_bollinger_lower_bound_pct:Phenotypes.RangeFactor(0.0, 100.0, 1.0)
         }
 }
-function checkForPriorSell (s)
-{
-  return !s.api_order || (s.api_order && s.api_order.tradetype != 'sell' && s.api_order.status != 'open') || (s.api_order && s.api_order.tradetype == 'sell' && s.api_order.status == 'done')
-}
-function checkForPriorBuy (s)
-{
-  return !s.api_order || (s.api_order && s.api_order.tradetype != 'buy' && s.api_order.status != 'open') || (s.api_order && s.api_order.tradetype == 'buy' && s.api_order.status == 'done')
-}
 
 function actOnNone(s,cb)
 {
@@ -799,7 +793,7 @@ function actOnNone(s,cb)
 
 function actOnBuy(s,cb)
 {
-  if (checkForPriorBuy(s))
+  if (dupOrderWorkAround.checkForPriorBuy(s))
     s.signal = 'buy'
   else
     s.signal == null
@@ -808,7 +802,7 @@ function actOnBuy(s,cb)
 
 function actOnSell(s,cb)
 {
-  if (checkForPriorSell(s))
+  if (dupOrderWorkAround.checkForPriorSell(s))
     s.signal = 'sell'
   else
     s.signal == null
@@ -856,7 +850,7 @@ function actOnBollinger_Stoch (s, bollinger_size, bollinger_time, bollinger_uppe
           {
             if (s.period.close >= MiddleBand && s.period.close >= ((UpperBand / 100) * (100 +  bollinger_upper_bound_pct)) && nextdivergent < divergent && _switch == -1 && stoch_K > stoch_k_sell) 
             {
-              if (checkForPriorSell(s))
+              if (dupOrderWorkAround.checkForPriorSell(s))
                 s.signal = 'sell'
               else
                 s.signal == null
@@ -864,7 +858,7 @@ function actOnBollinger_Stoch (s, bollinger_size, bollinger_time, bollinger_uppe
             else
             if ( s.period.close < (LowerBand / 100) * (100 + bollinger_lower_bound_pct)   &&  nextdivergent >= divergent  && _switch == 1    && stoch_K < stoch_k_buy) 
             {
-              if (checkForPriorBuy(s))
+              if (dupOrderWorkAround.checkForPriorBuy(s))
                 s.signal = 'buy'
               else
                 s.signal == null
@@ -925,7 +919,7 @@ function actOnBollinger_StochRSI (s, bollinger_size, bollinger_time, bollinger_u
           {
             if (s.action == null && s.period.close >= MiddleBand && s.period.close >= ((UpperBand / 100) * (100 +  bollinger_upper_bound_pct)) && nextdivergent < divergent && _switch == -1 && stoch_K > stochrsi_k_sell) 
             {
-              if (checkForPriorSell(s))
+              if (dupOrderWorkAround.checkForPriorSell(s))
                 s.signal = 'sell'
               else
                 s.signal == null
@@ -933,7 +927,7 @@ function actOnBollinger_StochRSI (s, bollinger_size, bollinger_time, bollinger_u
             else
             if (s.action == null && s.period.close < (LowerBand / 100) * (100 + bollinger_lower_bound_pct)   &&  nextdivergent >= divergent  && _switch == 1    && stoch_K < stochrsi_k_buy) 
             {
-              if (checkForPriorBuy(s))
+              if (dupOrderWorkAround.checkForPriorBuy(s))
                 s.signal = 'buy'
               else
                 s.signal == null
